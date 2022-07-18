@@ -1,4 +1,4 @@
-## PROTOTIPO-LOGIN-BACKEND
+## PROTOTIPO-LOGIN-API
 
 - [Sobre](#sobre)
 - [Instalação](#instalação)
@@ -10,7 +10,7 @@
 
 # Sobre
 
-<b>Prototipologin-API</b> é uma aplicação de login de fornecedores a seus relatórios Power-BI. Esta aplicação utiliza o framework Django.
+<b>PrototipoLogin-API</b> é uma aplicação de login de fornecedores a seus relatórios Power-BI. Esta aplicação utiliza o framework Django.
 <br>
 
 # Instalação
@@ -30,19 +30,19 @@ git init
 ```
 
 <br>
-<h5>1. Fazer o clone do reposítório <span>Prototipologin-API</span> na sua máquina pelo terminal do computador ou pelo do IDE:</h5>
+<h5>1. Fazer o clone do reposítório <span>PrototipoLogin-API</span> na sua máquina pelo terminal do computador ou pelo do IDE:</h5>
 
 ```
-git clone https://github.com/AndreKuratomi/Prototipologin-API.git
+git clone https://github.com/AndreKuratomi/PrototipoLogin-API.git
 ```
 
 <p>Entrar na pasta criada:</p>
 
 ```
-cd Prototipologin-API
+cd PrototipoLogin-API
 ```
 
-Após feito o clone do repositório Prototipologin-API, instalar:
+Após feito o clone do repositório PrototipoLogin-API, instalar:
 
 O ambiente virtual e atualizar suas dependências com o seguinte comando:
 
