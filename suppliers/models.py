@@ -8,7 +8,7 @@ class Supplier(models.Model):
     last_name = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
     password_provisional = models.CharField(max_length=255) # como fazer para ter duração definida??
-    signature_created_at = models.CharField(max_length=255)
+    signature_created_at = models.DateTimeField(max_length=255)
     signature_status = models.BooleanField()
     signature_vality = models.CharField(max_length=255)
     url_dashboard = models.CharField(max_length=255) # como automatizar para o PBI fornecê-lo???
