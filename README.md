@@ -4,7 +4,7 @@
 - [Instalação](#instalação)
 - [Documentação](#documentação)
 - [Termos de uso](#termos-de-uso)
-- [Referêcias](#referências)
+- [Referências](#referências)
 
 <br>
 
@@ -21,7 +21,7 @@
 
 - Uma <b>ferramenta cliente de API REST</b>. Por exemplo, o <b>[Insomnia](https://insomnia.rest/download)</b> ou o <b>[Postman](https://www.postman.com/product/rest-client/)</b>.
 
-- <b>Python</b> e pacotes essenciais como . Conferir <b>[asdf](https://asdf-vm.com/guide/getting-started.html)</b> e <b>[asdf-python](https://github.com/danhper/asdf-python)</b>.
+- <b>Python</b> e pacotes essenciais como <b>[asdf](https://asdf-vm.com/guide/getting-started.html)</b> e <b>[asdf-python](https://github.com/danhper/asdf-python)</b>.
 
 - <p> E versionar o diretório para receber o clone da aplicação:</p>
 
