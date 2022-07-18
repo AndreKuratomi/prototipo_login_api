@@ -21,6 +21,8 @@
 
 - Uma <b>ferramenta cliente de API REST</b>. Por exemplo, o <b>[Insomnia](https://insomnia.rest/download)</b> ou o <b>[Postman](https://www.postman.com/product/rest-client/)</b>.
 
+- <b>Python</b> e pacotes essenciais como . Conferir <b>[asdf](https://asdf-vm.com/guide/getting-started.html)</b> e <b>[asdf-python](https://github.com/danhper/asdf-python)</b>.
+
 - <p> E versionar o diretório para receber o clone da aplicação:</p>
 
 ```
@@ -79,6 +81,7 @@ Esse projeto atende a fins exclusivamente didáticos e sem nenhum intuito comerc
 # Referências
 
 - [Django](https://www.djangoproject.com/)
+- [Django Rest framework](https://www.django-rest-framework.org/#)
 - [JWT](https://github.com/auth0/node-jsonwebtoken)
 - [Bcrypt](https://github.com/kelektiv/node.bcrypt.js)
 - [Dotenv](https://www.npmjs.com/package/dotenv)
