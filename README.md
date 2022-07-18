@@ -4,6 +4,7 @@
 - [Instalação](#instalação)
 - [Documentação](#documentação)
 - [Termos de uso](#termos-de-uso)
+- [Referêcias](#referências)
 
 <br>
 
@@ -74,3 +75,10 @@ Para ter acesso às descrições, detalhes das rotas e seus retornos, conferir d
 # Termos de uso
 
 Esse projeto atende a fins exclusivamente didáticos e sem nenhum intuito comercial.
+
+# Referências
+
+- [Django](https://www.djangoproject.com/)
+- [JWT](https://github.com/auth0/node-jsonwebtoken)
+- [Bcrypt](https://github.com/kelektiv/node.bcrypt.js)
+- [Dotenv](https://www.npmjs.com/package/dotenv)
