@@ -4,7 +4,7 @@
 - [Instalação](#instalação)
 - [Documentação](#documentação)
 - [Termos de uso](#termos-de-uso)
-- [Referêcias](#referências)
+- [Referências](#referências)
 
 <br>
 
