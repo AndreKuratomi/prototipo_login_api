@@ -22,11 +22,13 @@ class RegisterSupplierSerializer(serializers.Serializer):
 
 class LoginSupplierSerializer(serializers.Serializer):
     username = serializers.CharField(required=True)
+    # email = serializers.CharField(required=True) que tal colocar como opçao email ou username? e como fazer?
+
     password = serializers.CharField(required=True)
 
 
 class AskChangePasswordSerializer(serializers.Serializer):
-    username = serializers.CharField(required=True)
+    username = serializers.CharField(required=True) # e precisa?
     email = serializers.CharField(required=True)
 
     password_provisional = serializers.CharField(required=True) # como fazer para ter duração definida??
