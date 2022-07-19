@@ -1,21 +1,39 @@
 from rest_framework import serializers
 
-class SupplierSerializer(serializers.Serializer):
-    cnpj = serializers.CharField(read_only=True) #PK!
-    email = serializers.CharField()
-    franquia = serializers.CharField()
-    fist_name = serializers.CharField()
-    last_name = serializers.CharField()
+class RegisterSupplierSerializer(serializers.Serializer):
+    cnpj = serializers.CharField(read_only=True, required=True) #PK!
+    email = serializers.CharField(required=True)
+    franquia = serializers.CharField(required=True)
+    fist_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
 
-    password = serializers.CharField()
-    password_provisional = serializers.CharField() # como fazer para ter duração definida??
+    password = serializers.CharField(required=True)
+    # password_provisional = serializers.CharField(required=True) # como fazer para ter duração definida??
     
-    signature_created_at = serializers.DateTimeField(read_only=True)
-    signature_status = serializers.BooleanField()
-    signature_vality = serializers.CharField()
+    signature_created_at = serializers.DateTimeField(read_only=True) # ele pode ser registrado sem ter assinatura?
+    signature_status = serializers.BooleanField(required=True)
+    signature_vality = serializers.CharField(required=True)
     
-    url_dashboard = serializers.CharField() # como automatizar para o PBI fornecê-lo???
+    url_dashboard = serializers.CharField(required=True) # como automatizar para o PBI fornecê-lo???
     
-    username = serializers.CharField()
+    username = serializers.CharField(required=True)
     username_created_at = serializers.DateTimeField(read_only=True)
+
+
+class LoginSupplierSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True)
+    password = serializers.CharField(required=True)
+
+
+class AskChangePasswordSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True)
+    email = serializers.CharField(required=True)
+
+    password_provisional = serializers.CharField(required=True) # como fazer para ter duração definida??
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    password_provisional = serializers.CharField(required=True) # como fazer para ter duração definida??
+    new_password = serializers.CharField(required=True) # como ele vai substituir a senha antiga??
+    repeat_new_password = serializers.CharField(required=True) # como ele vai substituir a senha antiga??
 
