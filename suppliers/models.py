@@ -21,5 +21,3 @@ class Supplier(AbstractUser):
     username = models.CharField(max_length=255, null=True)
     username_created_at = models.DateTimeField()
 
-
-class 
