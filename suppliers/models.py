@@ -53,16 +53,16 @@ class Supplier(AbstractUser):
     objects = CustomUserManager()
 
 
-class LoginSupplier(models.Model):
-    email = models.EmailField(editable=True, max_length=255, unique=True)
-    password = models.CharField(editable=True, max_length=255, unique=False)
+# class LoginSupplier(models.Model):
+#     email = models.EmailField(editable=True, max_length=255, unique=True)
+#     password = models.CharField(editable=True, max_length=255, unique=False)
 
 
-class AskChangeSulpplierPassword(models.Model):
-    email = models.EmailField(editable=True, max_length=255, unique=True)
+# class AskChangeSulpplierPassword(models.Model):
+#     email = models.EmailField(editable=True, max_length=255, unique=True)
 
 
-class ChangeSuplierPassword(models.Model):
-    password_provisional = models.CharField(default=uuid.uuid4, max_length=255, blank=True) # como fazer para ter duração definida??
-    new_password = models.CharField(editable=True, max_length=255, unique=False)
-    repeat_new_password = models.CharField(editable=True, max_length=255, unique=False)
+# class ChangeSuplierPassword(models.Model):
+#     password_provisional = models.CharField(default=uuid.uuid4, max_length=255, blank=True) # como fazer para ter duração definida??
+#     new_password = models.CharField(editable=True, max_length=255, unique=False)
+#     repeat_new_password = models.CharField(editable=True, max_length=255, unique=False)
