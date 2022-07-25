@@ -5,11 +5,11 @@ class RegisterSupplierSerializer(serializers.Serializer):
     cnpj = serializers.CharField(read_only=True) #PK!
     email = serializers.EmailField()
     franquia = serializers.CharField()
-    fist_name = serializers.CharField()
+    first_name = serializers.CharField()
     last_name = serializers.CharField()
     sexo = serializers.CharField() # COMO COLOCAR APENAS 2 OPÇÕES??
 
-    password = serializers.CharField(, write_only=True)
+    password = serializers.CharField(write_only=True)
     # password_provisional = serializers.CharField() # como fazer para ter duração definida??
     
     signature_created_at = serializers.DateTimeField(read_only=True) # ele pode ser registrado sem ter assinatura?
