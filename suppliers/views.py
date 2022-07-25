@@ -1,14 +1,16 @@
-from django.shortcuts import render
+from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.view import APIView
+from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 
-from django.contrib.auth import AuthenticationMiddleware
+from django.contrib.auth import authenticate
 
 from suppliers.serializers import RegisterSupplierSerializer, LoginSupplierSerializer, AskChangePasswordSerializer, ChangePasswordSerializer
 
 from .models import Supplier
+
+import ipdb
 
 
 class RegisterSupplierView(APIView):
@@ -18,10 +20,10 @@ class RegisterSupplierView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        find_supplier = RegisterSupplier.objects.filter(username=serializer.validated_data['email']).exists()
+        find_supplier = Supplier.objects.filter(email=serializer.validated_data['email']).exists()
         if find_supplier is True:
             return Response({"message": "Fornecedor já registrado!"}, status.HTTP_422_UNPROCESSABLE_ENTITY)
-        
+        ipdb.set_trace()
         supplier = Supplier.objects.create_user(**serializer.validated_data)
         serializer = RegisterSupplierSerializer(supplier)
 
@@ -42,10 +44,11 @@ class LoginSupplierView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        user = authenticate(username=serializer.validated_data['email'], password=serializer.validated_data['password'])
+        user = authenticate(email=serializer.validated_data['email'], password=serializer.validated_data['password'])
 
-        if user in not None:
+        if user is not None:
             token = Token.objects.get_or_create(user=user)[0]
+            # .objects.get_or_create(user=user)[0]
             return Response({'token': token.key})
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
