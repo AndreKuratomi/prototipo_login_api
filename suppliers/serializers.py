@@ -1,12 +1,13 @@
 from rest_framework import serializers
 
+
 class RegisterSupplierSerializer(serializers.Serializer):
     cnpj = serializers.CharField(read_only=True) #PK!
     email = serializers.EmailField()
     franquia = serializers.CharField()
     fist_name = serializers.CharField()
     last_name = serializers.CharField()
-    sexo = models.CharField() # COMO COLOCAR APENAS 2 OPÇÕES??
+    sexo = serializers.CharField() # COMO COLOCAR APENAS 2 OPÇÕES??
 
     password = serializers.CharField(, write_only=True)
     # password_provisional = serializers.CharField() # como fazer para ter duração definida??

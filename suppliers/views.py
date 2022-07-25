@@ -6,10 +6,9 @@ from rest_framework.authentication import TokenAuthentication
 
 from django.contrib.auth import AuthenticationMiddleware
 
-from suppliers.serializers import RegisterSupplierSerializer, LoginSupplierSerializer, 
+from suppliers.serializers import RegisterSupplierSerializer, LoginSupplierSerializer, AskChangePasswordSerializer, ChangePasswordSerializer
 
 from .models import Supplier
-
 
 
 class RegisterSupplierView(APIView):
@@ -19,7 +18,7 @@ class RegisterSupplierView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        find_supplier = RegisterSupplier.objrts.filter(username=serializer.validated_data['email']).exists()
+        find_supplier = RegisterSupplier.objects.filter(username=serializer.validated_data['email']).exists()
         if find_supplier is True:
             return Response({"message": "Fornecedor já registrado!"}, status.HTTP_422_UNPROCESSABLE_ENTITY)
         
@@ -33,7 +32,7 @@ class RegisterSupplierView(APIView):
         # serializer = RegisterSupplierSerializer(users, many=True)
 
         # return Response(serializer.data)
-        # para futuramente os administradores acessarem os fornecedores via API
+        # PARA OS ADMINS FUTURAMENTE ACESSAREM AS INF VIA API.
 
 
 class LoginSupplierView(APIView):
@@ -43,10 +42,31 @@ class LoginSupplierView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        user = authenticate(username=serializer.validated_data['username'], password=serializer.validated_data['password'])
+        user = authenticate(username=serializer.validated_data['email'], password=serializer.validated_data['password'])
 
         if user in not None:
             token = Token.objects.get_or_create(user=user)[0]
             return Response({'token': token.key})
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+
+class AskChangePasswordView(APIView):
+    def post(self, request):    # OU PATCH?
+        serializer = AskChangePasswordSerializer(data=resquest.data)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # ESTE POST GERARIA UM TOKEN QUE AUTOMATICAMENTE INSERIRIA UM TOKEN NA APLICAÇÃO E QUE VIABILIZARIA UM PATCH PARA INSERIR UM UUID NO PASSWORD_PROVISORY E (?) ELIMINARIA A SENHA REGISTRADA.
+
+
+class ChangePasswordView(APIView):
+    def post(self, request):    # OU PATCH?
+        serializer = ChangePasswordSerializer(data=resquest.data)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # POST QUE CONFIRMA O PASSWORD_PROVISORY E PREENCHE A NOVA SENHA. MAS APENAS A REPETIR_SENHA.
+
