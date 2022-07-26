@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 
 class RegisterSupplierSerializer(serializers.Serializer):
-    cnpj = serializers.CharField(read_only=True) #PK!
+    cnpj = serializers.CharField() #PK!
     email = serializers.EmailField()
     franquia = serializers.CharField()
     first_name = serializers.CharField()

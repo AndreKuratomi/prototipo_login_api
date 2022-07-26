@@ -39,14 +39,14 @@ class Supplier(AbstractUser):
     password = models.CharField(editable=True, max_length=255, unique=False)
     password_provisional = models.CharField(default=uuid.uuid4, max_length=255, blank=True) # como fazer para ter duração definida??
     
-    signature_created_at = models.DateTimeField(auto_now_add=True, max_length=255, null=False)
+    signature_created_at = models.DateTimeField(default=timezone.now, max_length=255, null=False)
     signature_status = models.BooleanField()
     signature_vality = models.CharField(max_length=255)
     
     url_dashboard = models.URLField(max_length=200) # como automatizar para o PBI fornecê-lo???
     
     username = models.CharField(max_length=255, null=True, unique=False)
-    username_created_at = models.DateTimeField(auto_now_add=True)
+    username_created_at = models.DateTimeField(default=timezone.now)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['cnpj', 'first_name', 'last_name', 'password', 'signature_status', 'signature_vality', 'url_dashboard', 'username']
