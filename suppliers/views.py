@@ -23,17 +23,19 @@ class RegisterSupplierView(APIView):
         find_supplier = Supplier.objects.filter(email=serializer.validated_data['email']).exists()
         if find_supplier is True:
             return Response({"message": "Fornecedor já registrado!"}, status.HTTP_422_UNPROCESSABLE_ENTITY)
-        ipdb.set_trace()
+        
+        
+        # ipdb.set_trace()
         supplier = Supplier.objects.create_user(**serializer.validated_data)
         serializer = RegisterSupplierSerializer(supplier)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
-    # def get(self, request):
-        # users = RegisterSupplier.objects.all()
-        # serializer = RegisterSupplierSerializer(users, many=True)
+    def get(self, request):
+        all_suppliers = Supplier.objects.all()
+        serializer = RegisterSupplierSerializer(all_suppliers, many=True)
 
-        # return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
         # PARA OS ADMINS FUTURAMENTE ACESSAREM AS INF VIA API.
 
 

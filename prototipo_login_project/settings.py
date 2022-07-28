@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-)&rdhw=8(088k(knwnf+1xz-n_3s9$6wgzcl1&3du61bbnf+b6
 DEBUG = True
 
 ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -41,7 +42,8 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    # 'corsheaders'
 ]
 
 MY_APPS = [
@@ -51,6 +53,7 @@ MY_APPS = [
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + MY_APPS
 
 MIDDLEWARE = [
+    # 'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -142,4 +145,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'suppliers.Supplier'
 
+# CORS_ALLOW_HEADERS = ['*']
 
+# CORS_ALLOW_ALL_ORIGINS = True

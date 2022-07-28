@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 
 class RegisterSupplierSerializer(serializers.Serializer):
-    cnpj = serializers.CharField(read_only=True) #PK!
+    cnpj = serializers.CharField() #PK!
     email = serializers.EmailField()
     franquia = serializers.CharField()
     first_name = serializers.CharField()
@@ -25,6 +25,9 @@ class RegisterSupplierSerializer(serializers.Serializer):
 class LoginSupplierSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
+
+    # login_logged_at = serializers.DateTimeField() #BANCO DE DADO PARA VER QUANTAS VEZES LOGOU
+
 
 
 class AskChangePasswordSerializer(serializers.Serializer):
