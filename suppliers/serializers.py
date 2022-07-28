@@ -26,6 +26,9 @@ class LoginSupplierSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
 
+    # login_logged_at = serializers.DateTimeField() #BANCO DE DADO PARA VER QUANTAS VEZES LOGOU
+
+
 
 class AskChangePasswordSerializer(serializers.Serializer):
     email = serializers.EmailField()
