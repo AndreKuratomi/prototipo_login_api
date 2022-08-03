@@ -12,5 +12,5 @@ class AdminMail(models.Model):
     subject = models.CharField(255)
     message = models.TextField()
     sender = models.CharField(255)
-    receiver = models.CharField(255)
+    receiver = models.CharField()
     fail_silently = models.BooleanField(default=False)
