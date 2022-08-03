@@ -43,7 +43,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
-    # 'corsheaders'
+    'corsheaders'
 ]
 
 MY_APPS = [
@@ -53,7 +53,7 @@ MY_APPS = [
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + MY_APPS
 
 MIDDLEWARE = [
-    # 'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -147,4 +147,14 @@ AUTH_USER_MODEL = 'suppliers.Supplier'
 
 # CORS_ALLOW_HEADERS = ['*']
 
-# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:8000",
+]
+
+CORS_ALLOW_METHODS = [
+    "GET",
+    "PATCH"
+    "POST",
+    "PUT",
+]

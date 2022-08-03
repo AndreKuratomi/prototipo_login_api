@@ -47,7 +47,7 @@ class LoginSupplierView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         user = authenticate(email=serializer.validated_data['email'], password=serializer.validated_data['password'])
-
+        # ipdb.set_trace()
         if user is not None:
             token = Token.objects.get_or_create(user=user)[0]
             # .objects.get_or_create(user=user)[0]
