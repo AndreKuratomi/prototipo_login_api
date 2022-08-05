@@ -146,7 +146,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'suppliers.Supplier'
 
-# CORS_ALLOW_HEADERS = ['*']
+
+# CORS
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
@@ -159,6 +160,9 @@ CORS_ALLOW_METHODS = [
     "POST",
     "PUT",
 ]
+
+
+#Emails
 
 ADMINS = [('Suporte', 'suporte.vestcasa@gmail.com')]
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
