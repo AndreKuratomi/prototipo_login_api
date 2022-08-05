@@ -43,17 +43,18 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
-    # 'corsheaders'
+    'corsheaders'
 ]
 
 MY_APPS = [
+    'emails',
     'suppliers',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + MY_APPS
 
 MIDDLEWARE = [
-    # 'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -145,6 +146,30 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'suppliers.Supplier'
 
-# CORS_ALLOW_HEADERS = ['*']
 
-# CORS_ALLOW_ALL_ORIGINS = True
+# CORS
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:8000",
+]
+
+CORS_ALLOW_METHODS = [
+    "GET",
+    "PATCH"
+    "POST",
+    "PUT",
+]
+
+
+#Emails
+
+ADMINS = [('Suporte', 'suporte.vestcasa@gmail.com')]
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'suporte.troca.senha.teste@gmail.com'
+# EMAIL_HOST_PASSWORD = '1234zxcv!@'
+EMAIL_HOST_PASSWORD = 'vkhjjyktopjgwgzj'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
