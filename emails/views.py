@@ -1,32 +1,34 @@
-from django.core.mail import send_mail
+from django.core.mail import mail_admins, send_mail
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from emails.serializers import UserMailSerializers, AdminMailSerializers
+from emails.serializers import MailSerializers
 
 import ipdb
 
 
-class UserMailView(APIView):
+class MailView(APIView):
     def post(self, request):
-        serializer = UserMailSerializers(data=request.data)
+        serializer = MailSerializers(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         # ipdb.set_trace()
-        send_mail(request.data['subject'], request.data['message'], request.data['sender'], [request.data['receiver']])
+        send_mail(request.data['subject_supplier'], request.data['message_supplier'], request.data['sender'], [request.data['receiver']])
+        mail_admins(request.data['subject_admin'], request.data['message_admin'])
 
         return Response({"message": "Email successfully sent"}, status=status.HTTP_200_OK)
 
 
-class AdminMailView(APIView):
-    def post(self, request):
-        serializer = AdminMailSerializers(data=request.data)
+# class AdminMailView(APIView):
+#     def post(self, request):
+#         serializer = AdminMailSerializers(data=request.data)
 
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         if not serializer.is_valid():
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        send_mail(request.data['subject'], request.data['message'], request.data['sender'], [request.data['receiver']])
+#         send_mail(request.data['subject'], request.data['message'], request.data['sender'], [request.data['receiver']])
 
-        return Response({"message": "Email successfully sent"}, status=status.HTTP_200_OK)
+#         return Response({"message": "Email successfully sent"}, status=status.HTTP_200_OK)
