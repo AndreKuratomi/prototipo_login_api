@@ -1,16 +1,16 @@
 from django.db import models
 
 class UserMail(models.Model):
-    subject = models.CharField(255)
+    subject = models.CharField(max_length=255)
     message = models.TextField()
-    sender = models.CharField(255)
-    receiver = models.CharField(255)
+    sender = models.CharField(max_length=255)
+    receiver = models.CharField(max_length=255)
     fail_silently = models.BooleanField(default=False)
 
 
 class AdminMail(models.Model):
-    subject = models.CharField(255)
+    subject = models.CharField(max_length=255)
     message = models.TextField()
-    sender = models.CharField(255)
-    receiver = models.CharField()
+    sender = models.CharField(max_length=255)
+    receiver = models.CharField(max_length=255)
     fail_silently = models.BooleanField(default=False)

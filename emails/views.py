@@ -5,15 +5,17 @@ from rest_framework import status
 
 from emails.serializers import UserMailSerializers, AdminMailSerializers
 
+import ipdb
+
 
 class UserMailView(APIView):
     def post(self, request):
         serializer = UserMailSerializers(data=request.data)
-
         if not serializer.is_valid():
-            return Response(serializer.erros, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        send_mail(request.data['subject'], request.data['message'], request.data['sender'], request.data['receiver'])
+        # ipdb.set_trace()
+        send_mail(request.data['subject'], request.data['message'], request.data['sender'], [request.data['receiver']])
 
         return Response({"message": "Email successfully sent"}, status=status.HTTP_200_OK)
 
@@ -23,8 +25,8 @@ class AdminMailView(APIView):
         serializer = AdminMailSerializers(data=request.data)
 
         if not serializer.is_valid():
-            return Response(serializer.erros, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        send_mail(request.data['subject'], request.data['message'], request.data['sender'], request.data['receiver'])
+        send_mail(request.data['subject'], request.data['message'], request.data['sender'], [request.data['receiver']])
 
         return Response({"message": "Email successfully sent"}, status=status.HTTP_200_OK)
