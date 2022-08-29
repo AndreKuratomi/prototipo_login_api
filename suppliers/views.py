@@ -13,7 +13,7 @@ from suppliers.serializers import RegisterSupplierSerializer, LoginSupplierSeria
 
 from .models import Supplier
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import uuid
 import ipdb
 
@@ -89,18 +89,12 @@ class MailView(APIView):
 
 
         # VARIÁVEL SENHA PROVISÓRIA:
-        reducedUUID = uuid.uuid4()
+        reducedUUID = str(uuid.uuid4())[0:8]
 
         # FORMATAÇÃO DE DATA:
-        rawDate = timezone.now()
-        # d = datetime.date()
-        date0 = "25/05/2021"
-        date1 = "02:35:15" # dd/mm/aaaa
-        datetime_date0 = datetime.strptime(date0, "%d/%m/%Y")
-        datetime_date1 = datetime.strptime(date1, "%H:%M:%S")
-        # date1 = rawDate.toLocaleString("pt-BR").split(" ")[1] # hh:mm:ss
-
-        ipdb.set_trace()
+        dia = (timezone.now() - timedelta(hours=3)).strftime("%d/%m/%Y")
+        horas = (timezone.now() - timedelta(hours=3)).strftime("%H:%M:%S")
+        # ipdb.set_trace()
 
         supplier_email_message = """\
             <html>
@@ -117,13 +111,13 @@ class MailView(APIView):
                     <h3>Vestcasa</h3>
                 </body>
             </html>
-        """ % (request.data['username'], reducedUUID[0:8])
+        """ % (request.data['username'], reducedUUID)
 
         admin_email_message = """\
             <html>
                 <head></head>
                 <body>
-                    <p>Notificação: O(A) usuário(a) %s solicitou troca de senha às 11:32:58 em 22/07/2022.</p>
+                    <p>Notificação: O(A) usuário(a) %s solicitou troca de senha às %s em %s.</p>
                     <p>Segue abaixo a senha provisória mais o link para alteração de senha:</p>
                     <br>
                     <p>Senha provisória de %s: %s </p>
@@ -132,7 +126,7 @@ class MailView(APIView):
                     <h3>Vestcasa</h3>
                 </body>
             </html>
-        """ % (request.data['username'], request.data['username'], reducedUUID[0:8])
+        """ % (request.data['username'], horas, dia, request.data['username'], reducedUUID)
 
         # ipdb.set_trace()
         send_mail(
