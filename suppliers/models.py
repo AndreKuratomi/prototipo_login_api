@@ -2,8 +2,13 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 from django.utils import timezone
-import uuid
 
+from datetime import datetime, timedelta
+
+import uuid
+import ipdb
+
+accurate_time = timezone.now() - timedelta(hours=3)
 
 class CustomUserManager(BaseUserManager):
     def _create_user(self, email, password, is_staff, is_superuser, **extra_fields):
@@ -38,8 +43,6 @@ class Supplier(AbstractUser):
 
     password = models.CharField(editable=True, max_length=255, unique=False)
     password_provisional = models.CharField(default=uuid.uuid4, max_length=255, blank=True) # como fazer para ter duração definida??
-    
-    is_superuser = models.BooleanField()
 
     signature_created_at = models.DateTimeField(default=timezone.now, max_length=255, null=False)
     signature_status = models.BooleanField()
@@ -48,7 +51,7 @@ class Supplier(AbstractUser):
     url_dashboard = models.URLField(max_length=200) # como automatizar para o PBI fornecê-lo???
     
     username = models.CharField(max_length=255, null=True, unique=False)
-    username_created_at = models.DateTimeField(default=timezone.now)
+    username_created_at = models.DateTimeField(default=accurate_time)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['cnpj', 'first_name', 'last_name', 'password', 'signature_status', 'signature_vality', 'url_dashboard', 'username']
