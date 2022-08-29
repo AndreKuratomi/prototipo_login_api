@@ -1,15 +1,20 @@
+from django.contrib.auth import authenticate
+from django.core.mail import EmailMessage, mail_admins, send_mail
+from django.template import loader
+from django.utils import timezone
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 
-from django.contrib.auth import authenticate
-
-from suppliers.serializers import RegisterSupplierSerializer, LoginSupplierSerializer, AskChangePasswordSerializer, ChangePasswordSerializer
+from suppliers.serializers import RegisterSupplierSerializer, LoginSupplierSerializer, AskChangePasswordSerializer, ChangePasswordSerializer, MailSerializer
 
 from .models import Supplier
 
+from datetime import datetime
+import uuid
 import ipdb
 
 
@@ -74,4 +79,77 @@ class ChangePasswordView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         # POST QUE CONFIRMA O PASSWORD_PROVISORY E PREENCHE A NOVA SENHA. MAS APENAS A REPETIR_SENHA.
+
+
+class MailView(APIView):
+    def post(self, request):
+        serializer = MailSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+        # VARIÁVEL SENHA PROVISÓRIA:
+        reducedUUID = uuid.uuid4()
+
+        # FORMATAÇÃO DE DATA:
+        rawDate = timezone.now()
+        # d = datetime.date()
+        date0 = "25/05/2021"
+        date1 = "02:35:15" # dd/mm/aaaa
+        datetime_date0 = datetime.strptime(date0, "%d/%m/%Y")
+        datetime_date1 = datetime.strptime(date1, "%H:%M:%S")
+        # date1 = rawDate.toLocaleString("pt-BR").split(" ")[1] # hh:mm:ss
+
+        ipdb.set_trace()
+
+        supplier_email_message = """\
+            <html>
+                <head></head>
+                <body>
+                    <p>Olá, %s! Recebemos seu pedido por nova senha.</p>
+                    <p>Segue abaixo a senha provisória mais o link para alteração de senha:</p>
+                    <br>
+                    <p>Senha provisória: %s </p>
+                    <p>Link para alteração de senha aqui</p>
+                    <br>
+                    <p>Por favor, não responda este e-mail. Ele é enviado de forma automática.<p>
+                    <p>Atenciosamente,</p>
+                    <h3>Vestcasa</h3>
+                </body>
+            </html>
+        """ % (request.data['username'], reducedUUID[0:8])
+
+        admin_email_message = """\
+            <html>
+                <head></head>
+                <body>
+                    <p>Notificação: O(A) usuário(a) %s solicitou troca de senha às 11:32:58 em 22/07/2022.</p>
+                    <p>Segue abaixo a senha provisória mais o link para alteração de senha:</p>
+                    <br>
+                    <p>Senha provisória de %s: %s </p>
+                    <br>
+                    
+                    <h3>Vestcasa</h3>
+                </body>
+            </html>
+        """ % (request.data['username'], request.data['username'], reducedUUID[0:8])
+
+        # ipdb.set_trace()
+        send_mail(
+            "Troca de email usuário(a) {a1} - Suporte VestCasa".format(a1=request.data['username']),
+            "",
+            "suporte.troca.senha.teste@gmail.com", 
+            [request.data['receiver']], 
+            fail_silently=False,
+            html_message=supplier_email_message
+            )
+        mail_admins(
+            "Aviso de troca de email - Usuário(a) {b1}".format(b1=request.data['username']), 
+            "",
+            fail_silently=False,
+            html_message=admin_email_message
+            )
+
+        return Response({"message": "Email successfully sent"}, status=status.HTTP_200_OK)
+
 
