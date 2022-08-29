@@ -94,6 +94,9 @@ class MailView(APIView):
         # FORMATAÇÃO DE DATA:
         dia = (timezone.now() - timedelta(hours=3)).strftime("%d/%m/%Y")
         horas = (timezone.now() - timedelta(hours=3)).strftime("%H:%M:%S")
+
+        # PARA OBTER USERNAME PELO EMAIL:
+        object = Supplier.objects.get(email=request.data['username'])
         # ipdb.set_trace()
 
         supplier_email_message = """\
@@ -111,7 +114,7 @@ class MailView(APIView):
                     <h3>Vestcasa</h3>
                 </body>
             </html>
-        """ % (request.data['username'], reducedUUID)
+        """ % (object.username, reducedUUID)
 
         admin_email_message = """\
             <html>
@@ -126,19 +129,19 @@ class MailView(APIView):
                     <h3>Vestcasa</h3>
                 </body>
             </html>
-        """ % (request.data['username'], horas, dia, request.data['username'], reducedUUID)
+        """ % (object.username, horas, dia, object.username, reducedUUID)
 
         # ipdb.set_trace()
         send_mail(
-            "Troca de email usuário(a) {a1} - Suporte VestCasa".format(a1=request.data['username']),
+            "Troca de email usuário(a) {a1} - Suporte VestCasa".format(a1=object.username),
             "",
             "suporte.troca.senha.teste@gmail.com", 
-            [request.data['receiver']], 
+            [request.data['username']], 
             fail_silently=False,
             html_message=supplier_email_message
             )
         mail_admins(
-            "Aviso de troca de email - Usuário(a) {b1}".format(b1=request.data['username']), 
+            "Aviso de troca de email - Usuário(a) {b1}".format(b1=object.username), 
             "",
             fail_silently=False,
             html_message=admin_email_message
