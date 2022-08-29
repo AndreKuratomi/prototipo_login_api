@@ -39,6 +39,8 @@ class Supplier(AbstractUser):
     password = models.CharField(editable=True, max_length=255, unique=False)
     password_provisional = models.CharField(default=uuid.uuid4, max_length=255, blank=True) # como fazer para ter duração definida??
     
+    is_superuser = models.BooleanField()
+
     signature_created_at = models.DateTimeField(default=timezone.now, max_length=255, null=False)
     signature_status = models.BooleanField()
     signature_vality = models.CharField(max_length=255)
