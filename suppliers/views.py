@@ -61,26 +61,6 @@ class LoginSupplierView(APIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
-# class AskChangePasswordView(APIView):
-#     def post(self, request):    # OU PATCH?
-#         serializer = AskChangePasswordSerializer(data=resquest.data)
-
-#         if not serializer.is_valid():
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-#         # ESTE POST GERARIA UM TOKEN QUE AUTOMATICAMENTE INSERIRIA UM TOKEN NA APLICAÇÃO E QUE VIABILIZARIA UM PATCH PARA INSERIR UM UUID NO PASSWORD_PROVISORY E (?) ELIMINARIA A SENHA REGISTRADA.
-
-
-# class ChangePasswordView(APIView):
-#     def post(self, request):    # OU PATCH?
-#         serializer = ChangePasswordSerializer(data=resquest.data)
-
-#         if not serializer.is_valid():
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-#         # POST QUE CONFIRMA O PASSWORD_PROVISORY E PREENCHE A NOVA SENHA. MAS APENAS A REPETIR_SENHA.
-
-
 class AskChangePasswordMailView(APIView):
     def post(self, request):
         serializer = AskChangePasswordSerializer(data=request.data)
@@ -89,7 +69,7 @@ class AskChangePasswordMailView(APIView):
 
 
         # VARIÁVEL SENHA PROVISÓRIA:
-        reducedUUID = str(uuid.uuid4())[0:8]
+        reducedUUID = str(uuid.uuid4())[0:8] # E COMO GARANTIR QUE ELA TERÁ UM PRAZO?
 
         # FORMATAÇÃO DE DATA:
         dia = (timezone.now() - timedelta(hours=3)).strftime("%d/%m/%Y")
@@ -97,16 +77,11 @@ class AskChangePasswordMailView(APIView):
 
         # PARA OBTER USERNAME PELO EMAIL:
         object = Supplier.objects.get(email=request.data['username'])
-        print(object.password_provisional)
-        print(object.password)
 
         # MUDANÇA SENHAS ATUAL E PROVISÓRIA:
         object.password_provisional = reducedUUID
-        print(object.password_provisional)
         object.set_password(str(uuid.uuid4()))
-        print(object.password)
         object.save()
-        # ipdb.set_trace()
 
         supplier_email_message = """\
             <html>
@@ -140,7 +115,6 @@ class AskChangePasswordMailView(APIView):
             </html>
         """ % (object.username, horas, dia, object.username, reducedUUID)
 
-        # ipdb.set_trace()
         send_mail(
             "Pedido troca de senha usuário(a) {a1} - Suporte VestCasa".format(a1=object.username),
             "",
@@ -164,7 +138,6 @@ class ChangePasswordMailView(APIView):
         serializer = ChangePasswordSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        # ipdb.set_trace()
 
         # FORMATAÇÃO DE DATA:
         dia = (timezone.now() - timedelta(hours=3)).strftime("%d/%m/%Y")
@@ -176,7 +149,6 @@ class ChangePasswordMailView(APIView):
         # DEFINIÇÃO NOVA SENHA:
         object2.set_password(request.data['new_password'])
         object2.save()
-        # ipdb.set_trace()
 
         # CONFIRMAÇÃO NOVA SENHA:
         object2.set_password(request.data['repeat_new_password'])
@@ -212,7 +184,6 @@ class ChangePasswordMailView(APIView):
             </html>
         """ % (object2.username, horas, dia, object2.username, request.data['new_password'])
 
-        # ipdb.set_trace()
         send_mail(
             "Confirmação troca de senha usuário(a) {a1} - Suporte VestCasa".format(a1=object2.username),
             "",
