@@ -61,14 +61,14 @@ class LoginSupplierView(APIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
-class AskChangePasswordView(APIView):
-    def post(self, request):    # OU PATCH?
-        serializer = AskChangePasswordSerializer(data=resquest.data)
+# class AskChangePasswordView(APIView):
+#     def post(self, request):    # OU PATCH?
+#         serializer = AskChangePasswordSerializer(data=resquest.data)
 
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         if not serializer.is_valid():
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        # ESTE POST GERARIA UM TOKEN QUE AUTOMATICAMENTE INSERIRIA UM TOKEN NA APLICAÇÃO E QUE VIABILIZARIA UM PATCH PARA INSERIR UM UUID NO PASSWORD_PROVISORY E (?) ELIMINARIA A SENHA REGISTRADA.
+#         # ESTE POST GERARIA UM TOKEN QUE AUTOMATICAMENTE INSERIRIA UM TOKEN NA APLICAÇÃO E QUE VIABILIZARIA UM PATCH PARA INSERIR UM UUID NO PASSWORD_PROVISORY E (?) ELIMINARIA A SENHA REGISTRADA.
 
 
 class ChangePasswordView(APIView):
@@ -81,7 +81,7 @@ class ChangePasswordView(APIView):
         # POST QUE CONFIRMA O PASSWORD_PROVISORY E PREENCHE A NOVA SENHA. MAS APENAS A REPETIR_SENHA.
 
 
-class MailView(APIView):
+class AskChangePasswordMailView(APIView):
     def post(self, request):
         serializer = MailSerializer(data=request.data)
         if not serializer.is_valid():
