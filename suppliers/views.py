@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 
-from suppliers.serializers import RegisterSupplierSerializer, LoginSupplierSerializer, AskChangePasswordSerializer, ChangePasswordSerializer, MailSerializer
+from suppliers.serializers import RegisterSupplierSerializer, LoginSupplierSerializer, AskChangePasswordSerializer, ChangePasswordSerializer
 
 from .models import Supplier
 
@@ -61,35 +61,15 @@ class LoginSupplierView(APIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
-class AskChangePasswordView(APIView):
-    def post(self, request):    # OU PATCH?
-        serializer = AskChangePasswordSerializer(data=resquest.data)
-
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        # ESTE POST GERARIA UM TOKEN QUE AUTOMATICAMENTE INSERIRIA UM TOKEN NA APLICAÇÃO E QUE VIABILIZARIA UM PATCH PARA INSERIR UM UUID NO PASSWORD_PROVISORY E (?) ELIMINARIA A SENHA REGISTRADA.
-
-
-class ChangePasswordView(APIView):
-    def post(self, request):    # OU PATCH?
-        serializer = ChangePasswordSerializer(data=resquest.data)
-
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        # POST QUE CONFIRMA O PASSWORD_PROVISORY E PREENCHE A NOVA SENHA. MAS APENAS A REPETIR_SENHA.
-
-
-class MailView(APIView):
+class AskChangePasswordMailView(APIView):
     def post(self, request):
-        serializer = MailSerializer(data=request.data)
+        serializer = AskChangePasswordSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
         # VARIÁVEL SENHA PROVISÓRIA:
-        reducedUUID = str(uuid.uuid4())[0:8]
+        reducedUUID = str(uuid.uuid4())[0:8] # E COMO GARANTIR QUE ELA TERÁ UM PRAZO?
 
         # FORMATAÇÃO DE DATA:
         dia = (timezone.now() - timedelta(hours=3)).strftime("%d/%m/%Y")
@@ -97,7 +77,11 @@ class MailView(APIView):
 
         # PARA OBTER USERNAME PELO EMAIL:
         object = Supplier.objects.get(email=request.data['username'])
-        # ipdb.set_trace()
+
+        # MUDANÇA SENHAS ATUAL E PROVISÓRIA:
+        object.password_provisional = reducedUUID
+        object.set_password(str(uuid.uuid4()))
+        object.save()
 
         supplier_email_message = """\
             <html>
@@ -131,9 +115,8 @@ class MailView(APIView):
             </html>
         """ % (object.username, horas, dia, object.username, reducedUUID)
 
-        # ipdb.set_trace()
         send_mail(
-            "Troca de email usuário(a) {a1} - Suporte VestCasa".format(a1=object.username),
+            "Pedido troca de senha usuário(a) {a1} - Suporte VestCasa".format(a1=object.username),
             "",
             "suporte.troca.senha.teste@gmail.com", 
             [request.data['username']], 
@@ -141,7 +124,7 @@ class MailView(APIView):
             html_message=supplier_email_message
             )
         mail_admins(
-            "Aviso de troca de email - Usuário(a) {b1}".format(b1=object.username), 
+            "Aviso pedido troca de senha - Usuário(a) {b1}".format(b1=object.username), 
             "",
             fail_silently=False,
             html_message=admin_email_message
@@ -149,4 +132,72 @@ class MailView(APIView):
 
         return Response({"message": "Email successfully sent"}, status=status.HTTP_200_OK)
 
+
+class ChangePasswordMailView(APIView):
+    def post(self, request):
+        serializer = ChangePasswordSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # FORMATAÇÃO DE DATA:
+        dia = (timezone.now() - timedelta(hours=3)).strftime("%d/%m/%Y")
+        horas = (timezone.now() - timedelta(hours=3)).strftime("%H:%M:%S")
+
+        # PARA OBTER USERNAME PELA SENHA PROVISÓRIA:
+        object2 = Supplier.objects.get(password_provisional=request.data['password_provisional'])
+
+        # DEFINIÇÃO NOVA SENHA:
+        object2.set_password(request.data['new_password'])
+        object2.save()
+
+        # CONFIRMAÇÃO NOVA SENHA:
+        object2.set_password(request.data['repeat_new_password'])
+        object2.save()
+
+        supplier_email_message = """\
+            <html>
+                <head></head>
+                <body>
+                    <p>Olá, %s!</p>
+                    <p>Sua senha foi atualizada com sucesso!</p>
+                    <br>
+                    <p>Siga agora para o login.</p>
+                    <br>
+                    <p>Por favor, não responda este e-mail. Ele é enviado de forma automática.<p>
+                    <p>Atenciosamente,</p>
+                    <h3>Vestcasa</h3>
+                </body>
+            </html>
+        """ % (object2.username)
+
+        admin_email_message = """\
+            <html>
+                <head></head>
+                <body>
+                    <p>Notificação: O(A) usuário(a) %s trocou de senha às %s em %s.</p>
+                    <br>
+                    <p>Nova senha de %s: %s </p>
+                    <br>
+                    
+                    <h3>Vestcasa</h3>
+                </body>
+            </html>
+        """ % (object2.username, horas, dia, object2.username, request.data['new_password'])
+
+        send_mail(
+            "Confirmação troca de senha usuário(a) {a1} - Suporte VestCasa".format(a1=object2.username),
+            "",
+            "suporte.troca.senha.teste@gmail.com", 
+            [object2.email], 
+            fail_silently=False,
+            html_message=supplier_email_message
+            )
+        mail_admins(
+            "Aviso de troca de senha - Usuário(a) {b1}".format(b1=object2.username), 
+            "",
+            fail_silently=False,
+            html_message=admin_email_message
+            )
+
+        return Response({"message": "Email successfully sent"}, status=status.HTTP_200_OK)
 
