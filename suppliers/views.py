@@ -97,6 +97,15 @@ class MailView(APIView):
 
         # PARA OBTER USERNAME PELO EMAIL:
         object = Supplier.objects.get(email=request.data['username'])
+        print(object.password_provisional)
+        print(object.password)
+
+        # MUDANÇA SENHAS ATUAL E PROVISÓRIA:
+        object.password_provisional = reducedUUID
+        print(object.password_provisional)
+        object.password = uuid.uuid4()
+        print(object.password)
+        object.save()
         # ipdb.set_trace()
 
         supplier_email_message = """\
@@ -149,4 +158,76 @@ class MailView(APIView):
 
         return Response({"message": "Email successfully sent"}, status=status.HTTP_200_OK)
 
+
+# class ChangeMailView(APIView):
+#     def post(self, request):
+#         serializer = MailSerializer(data=request.data)
+#         if not serializer.is_valid():
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+#         # VARIÁVEL SENHA PROVISÓRIA:
+#         reducedUUID = str(uuid.uuid4())[0:8]
+
+#         # FORMATAÇÃO DE DATA:
+#         dia = (timezone.now() - timedelta(hours=3)).strftime("%d/%m/%Y")
+#         horas = (timezone.now() - timedelta(hours=3)).strftime("%H:%M:%S")
+
+#         # PARA OBTER USERNAME PELO EMAIL:
+#         object = Supplier.objects.get(email=request.data['username'])
+#         print(object.password_provisional)
+#         # SENHA PROVISÓRIA
+#         object.password_provisional = reducedUUID
+#         print(object.password_provisional)
+#         # ipdb.set_trace()
+
+#         supplier_email_message = """\
+#             <html>
+#                 <head></head>
+#                 <body>
+#                     <p>Olá, %s! Recebemos seu pedido por nova senha.</p>
+#                     <p>Segue abaixo a senha provisória mais o link para alteração de senha:</p>
+#                     <br>
+#                     <p>Senha provisória: %s </p>
+#                     <p>Link para alteração de senha aqui</p>
+#                     <br>
+#                     <p>Por favor, não responda este e-mail. Ele é enviado de forma automática.<p>
+#                     <p>Atenciosamente,</p>
+#                     <h3>Vestcasa</h3>
+#                 </body>
+#             </html>
+#         """ % (object.username, reducedUUID)
+
+#         admin_email_message = """\
+#             <html>
+#                 <head></head>
+#                 <body>
+#                     <p>Notificação: O(A) usuário(a) %s solicitou troca de senha às %s em %s.</p>
+#                     <p>Segue abaixo a senha provisória mais o link para alteração de senha:</p>
+#                     <br>
+#                     <p>Senha provisória de %s: %s </p>
+#                     <br>
+                    
+#                     <h3>Vestcasa</h3>
+#                 </body>
+#             </html>
+#         """ % (object.username, horas, dia, object.username, reducedUUID)
+
+#         # ipdb.set_trace()
+#         send_mail(
+#             "Troca de email usuário(a) {a1} - Suporte VestCasa".format(a1=object.username),
+#             "",
+#             "suporte.troca.senha.teste@gmail.com", 
+#             [request.data['username']], 
+#             fail_silently=False,
+#             html_message=supplier_email_message
+#             )
+#         mail_admins(
+#             "Aviso de troca de email - Usuário(a) {b1}".format(b1=object.username), 
+#             "",
+#             fail_silently=False,
+#             html_message=admin_email_message
+#             )
+
+#         return Response({"message": "Email successfully sent"}, status=status.HTTP_200_OK)
 
