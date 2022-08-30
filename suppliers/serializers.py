@@ -30,14 +30,14 @@ class LoginSupplierSerializer(serializers.Serializer):
 
 
 
-class MailSerializer(serializers.Serializer):
+class AskChangePasswordSerializer(serializers.Serializer):
     username = serializers.CharField()
 
 
-class AskChangePasswordSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+# class AskChangePasswordSerializer(serializers.Serializer):
+#     email = serializers.EmailField()
 
-    password_provisional = serializers.CharField(read_only=True) # como fazer para ter duração definida??
+#     password_provisional = serializers.CharField(read_only=True) # como fazer para ter duração definida??
 
 
 class ChangePasswordSerializer(serializers.Serializer):

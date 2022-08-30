@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 
-from suppliers.serializers import RegisterSupplierSerializer, LoginSupplierSerializer, AskChangePasswordSerializer, ChangePasswordSerializer, MailSerializer
+from suppliers.serializers import RegisterSupplierSerializer, LoginSupplierSerializer, AskChangePasswordSerializer, ChangePasswordSerializer
 
 from .models import Supplier
 
@@ -71,19 +71,19 @@ class LoginSupplierView(APIView):
 #         # ESTE POST GERARIA UM TOKEN QUE AUTOMATICAMENTE INSERIRIA UM TOKEN NA APLICAÇÃO E QUE VIABILIZARIA UM PATCH PARA INSERIR UM UUID NO PASSWORD_PROVISORY E (?) ELIMINARIA A SENHA REGISTRADA.
 
 
-class ChangePasswordView(APIView):
-    def post(self, request):    # OU PATCH?
-        serializer = ChangePasswordSerializer(data=resquest.data)
+# class ChangePasswordView(APIView):
+#     def post(self, request):    # OU PATCH?
+#         serializer = ChangePasswordSerializer(data=resquest.data)
 
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         if not serializer.is_valid():
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        # POST QUE CONFIRMA O PASSWORD_PROVISORY E PREENCHE A NOVA SENHA. MAS APENAS A REPETIR_SENHA.
+#         # POST QUE CONFIRMA O PASSWORD_PROVISORY E PREENCHE A NOVA SENHA. MAS APENAS A REPETIR_SENHA.
 
 
 class AskChangePasswordMailView(APIView):
     def post(self, request):
-        serializer = MailSerializer(data=request.data)
+        serializer = AskChangePasswordSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -142,7 +142,7 @@ class AskChangePasswordMailView(APIView):
 
         # ipdb.set_trace()
         send_mail(
-            "Troca de email usuário(a) {a1} - Suporte VestCasa".format(a1=object.username),
+            "Pedido troca de senha usuário(a) {a1} - Suporte VestCasa".format(a1=object.username),
             "",
             "suporte.troca.senha.teste@gmail.com", 
             [request.data['username']], 
@@ -150,7 +150,7 @@ class AskChangePasswordMailView(APIView):
             html_message=supplier_email_message
             )
         mail_admins(
-            "Aviso de troca de email - Usuário(a) {b1}".format(b1=object.username), 
+            "Aviso pedido troca de senha - Usuário(a) {b1}".format(b1=object.username), 
             "",
             fail_silently=False,
             html_message=admin_email_message
@@ -159,75 +159,74 @@ class AskChangePasswordMailView(APIView):
         return Response({"message": "Email successfully sent"}, status=status.HTTP_200_OK)
 
 
-# class ChangeMailView(APIView):
-#     def post(self, request):
-#         serializer = MailSerializer(data=request.data)
-#         if not serializer.is_valid():
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class ChangePasswordMailView(APIView):
+    def post(self, request):
+        serializer = ChangePasswordSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # ipdb.set_trace()
 
+        # FORMATAÇÃO DE DATA:
+        dia = (timezone.now() - timedelta(hours=3)).strftime("%d/%m/%Y")
+        horas = (timezone.now() - timedelta(hours=3)).strftime("%H:%M:%S")
 
-#         # VARIÁVEL SENHA PROVISÓRIA:
-#         reducedUUID = str(uuid.uuid4())[0:8]
+        # PARA OBTER USERNAME PELA SENHA PROVISÓRIA:
+        object2 = Supplier.objects.get(password_provisional=request.data['password_provisional'])
 
-#         # FORMATAÇÃO DE DATA:
-#         dia = (timezone.now() - timedelta(hours=3)).strftime("%d/%m/%Y")
-#         horas = (timezone.now() - timedelta(hours=3)).strftime("%H:%M:%S")
+        # DEFINIÇÃO NOVA SENHA:
+        object2.set_password(request.data['new_password'])
+        object2.save()
+        # ipdb.set_trace()
 
-#         # PARA OBTER USERNAME PELO EMAIL:
-#         object = Supplier.objects.get(email=request.data['username'])
-#         print(object.password_provisional)
-#         # SENHA PROVISÓRIA
-#         object.password_provisional = reducedUUID
-#         print(object.password_provisional)
-#         # ipdb.set_trace()
+        # CONFIRMAÇÃO NOVA SENHA:
+        object2.set_password(request.data['repeat_new_password'])
+        object2.save()
 
-#         supplier_email_message = """\
-#             <html>
-#                 <head></head>
-#                 <body>
-#                     <p>Olá, %s! Recebemos seu pedido por nova senha.</p>
-#                     <p>Segue abaixo a senha provisória mais o link para alteração de senha:</p>
-#                     <br>
-#                     <p>Senha provisória: %s </p>
-#                     <p>Link para alteração de senha aqui</p>
-#                     <br>
-#                     <p>Por favor, não responda este e-mail. Ele é enviado de forma automática.<p>
-#                     <p>Atenciosamente,</p>
-#                     <h3>Vestcasa</h3>
-#                 </body>
-#             </html>
-#         """ % (object.username, reducedUUID)
+        supplier_email_message = """\
+            <html>
+                <head></head>
+                <body>
+                    <p>Olá, %s!</p>
+                    <p>Sua senha foi atualizada com sucesso!</p>
+                    <br>
+                    <p>Siga agora para o login.</p>
+                    <br>
+                    <p>Por favor, não responda este e-mail. Ele é enviado de forma automática.<p>
+                    <p>Atenciosamente,</p>
+                    <h3>Vestcasa</h3>
+                </body>
+            </html>
+        """ % (object2.username)
 
-#         admin_email_message = """\
-#             <html>
-#                 <head></head>
-#                 <body>
-#                     <p>Notificação: O(A) usuário(a) %s solicitou troca de senha às %s em %s.</p>
-#                     <p>Segue abaixo a senha provisória mais o link para alteração de senha:</p>
-#                     <br>
-#                     <p>Senha provisória de %s: %s </p>
-#                     <br>
+        admin_email_message = """\
+            <html>
+                <head></head>
+                <body>
+                    <p>Notificação: O(A) usuário(a) %s trocou de senha às %s em %s.</p>
+                    <br>
+                    <p>Nova senha de %s: %s </p>
+                    <br>
                     
-#                     <h3>Vestcasa</h3>
-#                 </body>
-#             </html>
-#         """ % (object.username, horas, dia, object.username, reducedUUID)
+                    <h3>Vestcasa</h3>
+                </body>
+            </html>
+        """ % (object2.username, horas, dia, object2.username, request.data['new_password'])
 
-#         # ipdb.set_trace()
-#         send_mail(
-#             "Troca de email usuário(a) {a1} - Suporte VestCasa".format(a1=object.username),
-#             "",
-#             "suporte.troca.senha.teste@gmail.com", 
-#             [request.data['username']], 
-#             fail_silently=False,
-#             html_message=supplier_email_message
-#             )
-#         mail_admins(
-#             "Aviso de troca de email - Usuário(a) {b1}".format(b1=object.username), 
-#             "",
-#             fail_silently=False,
-#             html_message=admin_email_message
-#             )
+        # ipdb.set_trace()
+        send_mail(
+            "Confirmação troca de senha usuário(a) {a1} - Suporte VestCasa".format(a1=object2.username),
+            "",
+            "suporte.troca.senha.teste@gmail.com", 
+            [object2.email], 
+            fail_silently=False,
+            html_message=supplier_email_message
+            )
+        mail_admins(
+            "Aviso de troca de senha - Usuário(a) {b1}".format(b1=object2.username), 
+            "",
+            fail_silently=False,
+            html_message=admin_email_message
+            )
 
-#         return Response({"message": "Email successfully sent"}, status=status.HTTP_200_OK)
+        return Response({"message": "Email successfully sent"}, status=status.HTTP_200_OK)
 
