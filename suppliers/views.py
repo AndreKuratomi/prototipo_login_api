@@ -103,7 +103,7 @@ class AskChangePasswordMailView(APIView):
         # MUDANÇA SENHAS ATUAL E PROVISÓRIA:
         object.password_provisional = reducedUUID
         print(object.password_provisional)
-        object.password = uuid.uuid4()
+        object.set_password(str(uuid.uuid4()))
         print(object.password)
         object.save()
         # ipdb.set_trace()
