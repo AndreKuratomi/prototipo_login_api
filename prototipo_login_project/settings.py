@@ -43,7 +43,8 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
-    'corsheaders'
+    'corsheaders',
+    'storages',
 ]
 
 MY_APPS = [
@@ -162,7 +163,7 @@ CORS_ALLOW_METHODS = [
 ]
 
 
-#Emails
+# Emails
 
 ADMINS = [('Suporte', 'suporte.vestcasa@gmail.com')]
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -173,3 +174,16 @@ EMAIL_HOST_PASSWORD = 'vkhjjyktopjgwgzj'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+
+
+# AWS
+
+AWS_ACCESS_KEY_ID = 'AKIAZ6XI6YUXXP46KH6U'
+AWS_DEFAULT_ACL = None
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'devbi.api.vestsys.com.br'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3-website-us-east-1.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_FILE_OVERWRITE = False
+AWS_S3_SIGNATURE_VERSION = 'AWS4-HMAC-SHA256'
+AWS_S3_VERIFY = True
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
