@@ -94,11 +94,21 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
 
+<<<<<<< HEAD
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'usuarios_integracao_bi',
+        'USER': 'postgres',
+        # 'PASSWORD': '12345678',
+        'PASSWORD': 'V3stcasA_Sf.09p&4W#',
+        # 'HOST': 'localhost',
+        'HOST': 'devbi-database-vestsys.c4qgrxlliws6.us-east-1.rds.amazonaws.com',
+=======
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'usuarios_integracao_bi',
         'USER': 'postgres',
         'PASSWORD': '1234',
         'HOST': 'localhost',
+>>>>>>> 827822950e4a644cfa4e3f6f6d853eae30f5b85e
         'PORT': '5432'
     }
 }
@@ -178,12 +188,23 @@ EMAIL_USE_SSL = False
 
 # # AWS
 
+<<<<<<< HEAD
+AWS_ACCESS_KEY_ID = 'AKIAZ6XI6YUXXP46KH6U'
+# AWS_DEFAULT_ACL = None
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'devbi.api.vestsys.com.br'
+=======
 # AWS_ACCESS_KEY_ID = 'AKIAZ6XI6YUXXP46KH6U'
 # AWS_DEFAULT_ACL = None
 # AWS_SECRET_ACCESS_KEY = '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'
 # AWS_STORAGE_BUCKET_NAME = 'devbi.api.vestsys.com.br'
+>>>>>>> 827822950e4a644cfa4e3f6f6d853eae30f5b85e
 # AWS_S3_CUSTOM_DOMAIN = '%s.s3-website-us-east-1.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 # AWS_S3_FILE_OVERWRITE = False
 # AWS_S3_SIGNATURE_VERSION = 'AWS4-HMAC-SHA256'
 # AWS_S3_VERIFY = True
 # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+<<<<<<< HEAD
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+=======
+>>>>>>> 827822950e4a644cfa4e3f6f6d853eae30f5b85e
