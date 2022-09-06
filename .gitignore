@@ -5,3 +5,5 @@ venv/
 */migrations/000*
 
 node_modules/
+
+.env

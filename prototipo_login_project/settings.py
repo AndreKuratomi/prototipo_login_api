@@ -9,8 +9,11 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import os
+from dotenv import load_env
 from pathlib import Path
+
+load_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -94,22 +97,14 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
 
-<<<<<<< HEAD
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'usuarios_integracao_bi',
-        'USER': 'postgres',
-        # 'PASSWORD': '12345678',
-        'PASSWORD': 'V3stcasA_Sf.09p&4W#',
-        # 'HOST': 'localhost',
-        'HOST': 'devbi-database-vestsys.c4qgrxlliws6.us-east-1.rds.amazonaws.com',
-=======
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'usuarios_integracao_bi',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
->>>>>>> 827822950e4a644cfa4e3f6f6d853eae30f5b85e
+        'NAME': os.getenv(POSTGRES_DB),
+        'USER': os.getenv(POSTGRES_USER),
+        'PASSWORD': os.getenv(POSTGRES_PASSWORD),
+        'HOST': os.getenv(POSTGRES_HOST),
         'PORT': '5432'
+        # 'HOST': 'localhost',
+        # 'PASSWORD': '12345678',
     }
 }
 
