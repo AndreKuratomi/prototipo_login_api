@@ -1,0 +1,7 @@
+venv/
+
+*__pycache__
+
+*/migrations/000*
+
+node_modules/
