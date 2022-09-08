@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 import uuid
 import ipdb
 
-accurate_time = timezone.now() - timedelta(hours=3)
+accurate_time = datetime.now() - timedelta(hours=3)
 
 class CustomUserManager(BaseUserManager):
     def _create_user(self, email, password, is_staff, is_superuser, **extra_fields):
