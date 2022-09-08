@@ -52,11 +52,27 @@ class LoginSupplierView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         user = authenticate(email=serializer.validated_data['email'], password=serializer.validated_data['password'])
-        # ipdb.set_trace()
         if user is not None:
             token = Token.objects.get_or_create(user=user)[0]
-            # .objects.get_or_create(user=user)[0]
-            return Response({'token': token.key})
+
+            # CÁLCULO VALIDADE ASSINATURA:
+            signature_vality = user.signature_vality
+            date_signed = datetime.strptime(signature_vality, "%Y-%d-%mT%H:%M:%S.%fZ")
+            date_now = datetime.now() - timedelta(hours=3)
+
+            result = date_signed - date_now
+
+            # ipdb.set_trace()
+            if result.days >= 0:
+                if result.days > 15:
+                    return Response({'token': token.key})
+
+                elif result.days <= 15:
+                    return Response({"message": "Assinatura perto de vencer! Contatar suporte.", 'token': token.key})
+            
+            else:
+                return Response({"message": "Assinatura vencida! Contatar suporte."}, status=status.HTTP_401_UNAUTHORIZED)
+
         else:
             return Response({"message": "Fornecedor não encontrado! Verificar dados."}, status=status.HTTP_401_UNAUTHORIZED)
 
