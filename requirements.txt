@@ -24,6 +24,7 @@ ptyprocess==0.7.0
 pure-eval==0.2.2
 Pygments==2.12.0
 python-dateutil==2.8.2
+python-dotenv==0.21.0
 pytz==2022.1
 s3transfer==0.6.0
 six==1.16.0
