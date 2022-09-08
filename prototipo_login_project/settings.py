@@ -10,10 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
-from dotenv import load_env
+from dotenv import load_dotenv
 from pathlib import Path
 
-load_env()
+import ipdb
+
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,8 +32,6 @@ SECRET_KEY = 'django-insecure-)&rdhw=8(088k(knwnf+1xz-n_3s9$6wgzcl1&3du61bbnf+b6
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-# ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -92,16 +93,17 @@ WSGI_APPLICATION = 'prototipo_login_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# ipdb.set_trace()
 DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
 
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv(POSTGRES_DB),
-        'USER': os.getenv(POSTGRES_USER),
-        'PASSWORD': os.getenv(POSTGRES_PASSWORD),
-        'HOST': os.getenv(POSTGRES_HOST),
+        'NAME': os.getenv('POSTGRES_DB'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('POSTGRES_HOST'),
         'PORT': '5432'
         # 'HOST': 'localhost',
         # 'PASSWORD': '12345678',
@@ -183,23 +185,13 @@ EMAIL_USE_SSL = False
 
 # # AWS
 
-<<<<<<< HEAD
 AWS_ACCESS_KEY_ID = 'AKIAZ6XI6YUXXP46KH6U'
 # AWS_DEFAULT_ACL = None
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'devbi.api.vestsys.com.br'
-=======
-# AWS_ACCESS_KEY_ID = 'AKIAZ6XI6YUXXP46KH6U'
-# AWS_DEFAULT_ACL = None
-# AWS_SECRET_ACCESS_KEY = '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'
-# AWS_STORAGE_BUCKET_NAME = 'devbi.api.vestsys.com.br'
->>>>>>> 827822950e4a644cfa4e3f6f6d853eae30f5b85e
 # AWS_S3_CUSTOM_DOMAIN = '%s.s3-website-us-east-1.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 # AWS_S3_FILE_OVERWRITE = False
 # AWS_S3_SIGNATURE_VERSION = 'AWS4-HMAC-SHA256'
 # AWS_S3_VERIFY = True
 # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-<<<<<<< HEAD
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-=======
->>>>>>> 827822950e4a644cfa4e3f6f6d853eae30f5b85e
