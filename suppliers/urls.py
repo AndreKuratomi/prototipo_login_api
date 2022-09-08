@@ -6,5 +6,4 @@ urlpatterns = [
     path('login/', LoginSupplierView.as_view()),
     path('ask/', AskChangePasswordMailView.as_view()),
     path('change/', ChangePasswordMailView.as_view())
-
 ]
