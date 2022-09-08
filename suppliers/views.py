@@ -58,7 +58,7 @@ class LoginSupplierView(APIView):
             # .objects.get_or_create(user=user)[0]
             return Response({'token': token.key})
         else:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"message": "Fornecedor não encontrado! Verificar dados."}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class AskChangePasswordMailView(APIView):

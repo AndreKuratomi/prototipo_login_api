@@ -47,6 +47,7 @@ class Supplier(AbstractUser):
     signature_created_at = models.DateTimeField(default=accurate_time, max_length=255, null=False)
     signature_status = models.BooleanField()
     signature_vality = models.CharField(max_length=255)
+    is_super_user = models.BooleanField()
     
     url_dashboard = models.URLField(max_length=255) # como automatizar para o PBI fornecê-lo???
     
@@ -54,7 +55,7 @@ class Supplier(AbstractUser):
     username_created_at = models.DateTimeField(default=accurate_time)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['cnpj', 'first_name', 'last_name', 'password', 'signature_status', 'signature_vality', 'url_dashboard', 'username']
+    REQUIRED_FIELDS = ['cnpj', 'first_name', 'last_name', 'password', 'signature_status', 'signature_vality', 'is_super_user', 'url_dashboard', 'username']
     objects = CustomUserManager()
 
 
