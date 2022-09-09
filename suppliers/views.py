@@ -57,18 +57,21 @@ class LoginSupplierView(APIView):
 
             # CÁLCULO VALIDADE ASSINATURA:
             signature_vality = user.signature_vality
+            
             date_signed = datetime.strptime(signature_vality, "%Y-%d-%mT%H:%M:%S.%fZ")
             date_now = datetime.now() - timedelta(hours=3)
 
             result = date_signed - date_now
 
-            # ipdb.set_trace()
+            signature_in_miliseconds = date_signed.timestamp()
+
             if result.days >= 0:
                 if result.days > 15:
-                    return Response({'token': token.key})
+                    return Response({'token': token.key,
+                                    'signature_vality': signature_in_miliseconds, 'super_user': user.is_super_user})
 
                 elif result.days <= 15:
-                    return Response({"message": "Assinatura perto de vencer! Contatar suporte.", 'token': token.key})
+                    return Response({"message": "Assinatura perto de vencer! Contatar suporte.", 'token': token.key, 'signature_vality': signature_in_miliseconds, 'super_user': user.is_super_user})
             
             else:
                 return Response({"message": "Assinatura vencida! Contatar suporte."}, status=status.HTTP_401_UNAUTHORIZED)
