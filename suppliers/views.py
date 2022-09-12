@@ -103,6 +103,9 @@ class AskChangePasswordMailView(APIView):
         object.set_password(str(uuid.uuid4()))
         object.save()
 
+        # LINKS:
+        link_change_password = "http://localhost:3000/changepassword"
+
         supplier_email_message = """\
             <html>
                 <head></head>
@@ -111,14 +114,14 @@ class AskChangePasswordMailView(APIView):
                     <p>Segue abaixo a senha provisória mais o link para alteração de senha:</p>
                     <br>
                     <p>Senha provisória: %s </p>
-                    <p>Link para alteração de senha aqui: http://localhost:3000/changepassword</p>
+                    <p>Link para alteração de senha <a href="%s">aqui</a></p>
                     <br>
                     <p>Por favor, não responda este e-mail. Ele é enviado de forma automática.<p>
                     <p>Atenciosamente,</p>
                     <h3>Vestcasa</h3>
                 </body>
             </html>
-        """ % (object.username, reducedUUID)
+        """ % (object.username, reducedUUID, link_change_password)
 
         admin_email_message = """\
             <html>
@@ -164,7 +167,12 @@ class ChangePasswordMailView(APIView):
         horas = (timezone.now() - timedelta(hours=3)).strftime("%H:%M:%S")
 
         # PARA OBTER USERNAME PELA SENHA PROVISÓRIA:
+        # ipdb.set_trace()
         object2 = Supplier.objects.get(password_provisional=request.data['password_provisional'])
+        # except DoesNotExist:
+        # VER COMO RETORNAR ESTE ERRO (ESTRUTURA TRY/EXCEPT):
+        # if suppliers.models.Supplier.DoesNotExist:
+        #     return Response({"message": "Password provisional not found. Verify email sent."}, status=status.HTTP_404_BAD_REQUEST)
 
         # DEFINIÇÃO NOVA SENHA:
         object2.set_password(request.data['new_password'])
@@ -174,6 +182,9 @@ class ChangePasswordMailView(APIView):
         object2.set_password(request.data['repeat_new_password'])
         object2.save()
 
+        # LINKS:
+        link_login = "http://localhost:3000/"
+
         supplier_email_message = """\
             <html>
                 <head></head>
@@ -181,14 +192,14 @@ class ChangePasswordMailView(APIView):
                     <p>Olá, %s!</p>
                     <p>Sua senha foi atualizada com sucesso!</p>
                     <br>
-                    <p>Siga agora para o login.</p>
+                    <p>Siga agora para o <a href="%s">login</a>.</p>
                     <br>
                     <p>Por favor, não responda este e-mail. Ele é enviado de forma automática.<p>
                     <p>Atenciosamente,</p>
                     <h3>Vestcasa</h3>
                 </body>
             </html>
-        """ % (object2.username)
+        """ % (object2.username, link_login)
 
         admin_email_message = """\
             <html>
