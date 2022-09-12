@@ -31,7 +31,7 @@ class LoginSupplierSerializer(serializers.Serializer):
 
 
 class AskChangePasswordSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    email = serializers.EmailField()
 
 
 class ChangePasswordSerializer(serializers.Serializer):

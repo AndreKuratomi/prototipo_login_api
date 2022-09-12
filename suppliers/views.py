@@ -96,7 +96,7 @@ class AskChangePasswordMailView(APIView):
         horas = (timezone.now() - timedelta(hours=3)).strftime("%H:%M:%S")
 
         # PARA OBTER USERNAME PELO EMAIL:
-        object = Supplier.objects.get(email=request.data['username'])
+        object = Supplier.objects.get(email=request.data['email'])
 
         # MUDANÇA SENHAS ATUAL E PROVISÓRIA:
         object.password_provisional = reducedUUID
@@ -111,7 +111,7 @@ class AskChangePasswordMailView(APIView):
                     <p>Segue abaixo a senha provisória mais o link para alteração de senha:</p>
                     <br>
                     <p>Senha provisória: %s </p>
-                    <p>Link para alteração de senha aqui</p>
+                    <p>Link para alteração de senha aqui: http://localhost:3000/changepassword</p>
                     <br>
                     <p>Por favor, não responda este e-mail. Ele é enviado de forma automática.<p>
                     <p>Atenciosamente,</p>
@@ -139,7 +139,7 @@ class AskChangePasswordMailView(APIView):
             "Pedido troca de senha usuário(a) {a1} - Suporte VestCasa".format(a1=object.username),
             "",
             "suporte.troca.senha.teste@gmail.com", 
-            [request.data['username']], 
+            [request.data['email']], 
             fail_silently=False,
             html_message=supplier_email_message
             )
