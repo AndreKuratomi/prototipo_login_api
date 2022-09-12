@@ -7,7 +7,6 @@ class RegisterSupplierSerializer(serializers.Serializer):
     franquia = serializers.CharField()
     first_name = serializers.CharField()
     last_name = serializers.CharField()
-    sexo = serializers.CharField() # COMO COLOCAR APENAS 2 OPÇÕES??
 
     password = serializers.CharField(write_only=True)
     # password_provisional = serializers.CharField() # como fazer para ter duração definida??
@@ -32,7 +31,7 @@ class LoginSupplierSerializer(serializers.Serializer):
 
 
 class AskChangePasswordSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    email = serializers.EmailField()
 
 
 class ChangePasswordSerializer(serializers.Serializer):

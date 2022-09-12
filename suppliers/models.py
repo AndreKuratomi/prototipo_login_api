@@ -39,7 +39,6 @@ class Supplier(AbstractUser):
     franquia = models.CharField(max_length=255, blank=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    sexo = models.CharField(max_length=255) # COMO COLOCAR APENAS 2 OPÇÕES??
 
     password = models.CharField(editable=True, max_length=255, unique=False)
     password_provisional = models.CharField(default=uuid.uuid4, max_length=255, blank=True) # como fazer para ter duração definida??
@@ -53,6 +52,10 @@ class Supplier(AbstractUser):
     
     username = models.CharField(max_length=255, null=True, unique=False)
     username_created_at = models.DateTimeField(default=accurate_time)
+
+    # # Lista para todas as 'logadas':
+    # logs = models.ListCharField()
+    # logged_in = models.DateTimeField(default=accurate_time)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['cnpj', 'first_name', 'last_name', 'password', 'signature_status', 'signature_vality', 'is_super_user', 'url_dashboard', 'username']

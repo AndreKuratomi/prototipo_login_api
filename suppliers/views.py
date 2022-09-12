@@ -52,29 +52,33 @@ class LoginSupplierView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         user = authenticate(email=serializer.validated_data['email'], password=serializer.validated_data['password'])
+        # ipdb.set_trace()
         if user is not None:
             token = Token.objects.get_or_create(user=user)[0]
 
             # CÁLCULO VALIDADE ASSINATURA:
             signature_vality = user.signature_vality
+            
             date_signed = datetime.strptime(signature_vality, "%Y-%d-%mT%H:%M:%S.%fZ")
             date_now = datetime.now() - timedelta(hours=3)
 
             result = date_signed - date_now
 
-            # ipdb.set_trace()
+            signature_in_miliseconds = date_signed.timestamp()
+
             if result.days >= 0:
                 if result.days > 15:
-                    return Response({'token': token.key})
+                    return Response({'token': token.key,
+                                    'signature_vality': signature_in_miliseconds, 'super_user': user.is_super_user})
 
                 elif result.days <= 15:
-                    return Response({"message": "Assinatura perto de vencer! Contatar suporte.", 'token': token.key})
+                    return Response({"message": "Assinatura perto de vencer! Contatar suporte.", 'token': token.key, 'signature_vality': signature_in_miliseconds, 'super_user': user.is_super_user})
             
             else:
                 return Response({"message": "Assinatura vencida! Contatar suporte."}, status=status.HTTP_401_UNAUTHORIZED)
 
         else:
-            return Response({"message": "Fornecedor não encontrado! Verificar dados."}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"message": "Fornecedor não encontrado! Verificar dados."}, status=status.HTTP_404_NOT_FOUND)
 
 
 class AskChangePasswordMailView(APIView):
@@ -92,7 +96,7 @@ class AskChangePasswordMailView(APIView):
         horas = (timezone.now() - timedelta(hours=3)).strftime("%H:%M:%S")
 
         # PARA OBTER USERNAME PELO EMAIL:
-        object = Supplier.objects.get(email=request.data['username'])
+        object = Supplier.objects.get(email=request.data['email'])
 
         # MUDANÇA SENHAS ATUAL E PROVISÓRIA:
         object.password_provisional = reducedUUID
@@ -107,7 +111,7 @@ class AskChangePasswordMailView(APIView):
                     <p>Segue abaixo a senha provisória mais o link para alteração de senha:</p>
                     <br>
                     <p>Senha provisória: %s </p>
-                    <p>Link para alteração de senha aqui</p>
+                    <p>Link para alteração de senha aqui: http://localhost:3000/changepassword</p>
                     <br>
                     <p>Por favor, não responda este e-mail. Ele é enviado de forma automática.<p>
                     <p>Atenciosamente,</p>
@@ -135,7 +139,7 @@ class AskChangePasswordMailView(APIView):
             "Pedido troca de senha usuário(a) {a1} - Suporte VestCasa".format(a1=object.username),
             "",
             "suporte.troca.senha.teste@gmail.com", 
-            [request.data['username']], 
+            [request.data['email']], 
             fail_silently=False,
             html_message=supplier_email_message
             )
