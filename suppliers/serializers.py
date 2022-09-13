@@ -16,8 +16,8 @@ class RegisterSupplierSerializer(serializers.Serializer):
     # password_provisional = serializers.CharField() # como fazer para ter duração definida??
     
     signature_created_at = serializers.DateTimeField(read_only=True) # ele pode ser registrado sem ter assinatura?
-    signature_status = serializers.BooleanField()
     signature_vality = serializers.CharField()
+    
     is_super_user = serializers.BooleanField()
     
     url_dashboard = serializers.URLField() # como automatizar para o PBI fornecê-lo???

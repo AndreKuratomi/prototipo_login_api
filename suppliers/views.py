@@ -52,24 +52,17 @@ class LoginSupplierView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         user = authenticate(email=serializer.validated_data['email'], password=serializer.validated_data['password'])
-        # ipdb.set_trace()
+
         if user is not None:
             token = Token.objects.get_or_create(user=user)[0]
 
             # DATA E HORA LOGADAS:
             date_logged = datetime.now() - timedelta(hours=3)
             log_adm_view = datetime.strftime(date_logged, "%d-%m-%Y às %H:%M:%S")
-            # print(log_adm_view)
+
             user.login_dates.create(date_logged=log_adm_view)
 
-            # logs_list = user.login_dates
-            # logs_list = []
-            # logs_list.append(log_adm_view)
-            # if logs_list.length = 0 {
-
-            # }
             user.save()
-            # ipdb.set_trace()
 
             # CÁLCULO VALIDADE ASSINATURA:
             signature_vality = user.signature_vality
@@ -86,7 +79,6 @@ class LoginSupplierView(APIView):
                     return Response({'token': token.key,
                                     'signature_vality': signature_in_miliseconds, 
                                     'super_user': user.is_super_user,
-                                    #  'date_logged': user.login_dates
                                     })
 
                 elif result.days <= 15:
@@ -94,7 +86,6 @@ class LoginSupplierView(APIView):
                                      'token': token.key, 
                                      'signature_vality': signature_in_miliseconds, 
                                      'super_user': user.is_super_user, 
-                                    #  'date_logged': user.login_dates
                                      })
             
             else:
