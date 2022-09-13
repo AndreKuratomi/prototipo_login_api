@@ -9,6 +9,7 @@ import uuid
 import ipdb
 
 accurate_time = datetime.now() - timedelta(hours=3)
+log_adm_view = datetime.strftime(accurate_time, "%d-%m-%Y às %H:%M:%S")
 
 class CustomUserManager(BaseUserManager):
     def _create_user(self, email, password, is_staff, is_superuser, **extra_fields):
@@ -44,8 +45,8 @@ class Supplier(AbstractUser):
     password_provisional = models.CharField(default=uuid.uuid4, max_length=255, blank=True) # como fazer para ter duração definida??
 
     signature_created_at = models.DateTimeField(default=accurate_time, max_length=255, null=False)
-    signature_status = models.BooleanField()
     signature_vality = models.CharField(max_length=255)
+    
     is_super_user = models.BooleanField()
     
     url_dashboard = models.URLField(max_length=255) # como automatizar para o PBI fornecê-lo???
@@ -53,25 +54,12 @@ class Supplier(AbstractUser):
     username = models.CharField(max_length=255, null=True, unique=False)
     username_created_at = models.DateTimeField(default=accurate_time)
 
-    # # Lista para todas as 'logadas':
-    # logs = models.ListCharField()
-    # logged_in = models.DateTimeField(default=accurate_time)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['cnpj', 'first_name', 'last_name', 'password', 'signature_status', 'signature_vality', 'is_super_user', 'url_dashboard', 'username']
     objects = CustomUserManager()
 
 
-# class LoginSupplier(models.Model):
-#     email = models.EmailFietrueld(editable=True, max_length=255, unique=True)
-#     password = models.CharField(editable=True, max_length=255, unique=False)
-
-
-# class AskChangeSulpplierPassword(models.Model):
-#     email = models.EmailField(editable=True, max_length=255, unique=True)
-
-
-# class ChangeSuplierPassword(models.Model):
-#     password_provisional = models.CharField(default=uuid.uuid4, max_length=255, blank=True) # como fazer para ter duração definida??
-#     new_password = models.CharField(editable=True, max_length=255, unique=False)
-#     repeat_new_password = models.CharField(editable=True, max_length=255, unique=False)
+class LoggedSupplier(models.Model):
+    date_logged = models.CharField(max_length=255)
+    supplier = models.ForeignKey("Supplier", blank=True, on_delete=models.CASCADE, related_name="login_dates")

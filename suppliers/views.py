@@ -9,9 +9,9 @@ from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 
-from suppliers.serializers import RegisterSupplierSerializer, LoginSupplierSerializer, AskChangePasswordSerializer, ChangePasswordSerializer
+from suppliers.serializers import RegisterSupplierSerializer, LoginSupplierSerializer, LoggedSupplierSerializer, AskChangePasswordSerializer, ChangePasswordSerializer
 
-from .models import Supplier
+from .models import Supplier, LoggedSupplier
 
 from datetime import datetime, timedelta
 import uuid
@@ -52,9 +52,17 @@ class LoginSupplierView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         user = authenticate(email=serializer.validated_data['email'], password=serializer.validated_data['password'])
-        # ipdb.set_trace()
+
         if user is not None:
             token = Token.objects.get_or_create(user=user)[0]
+
+            # DATA E HORA LOGADAS:
+            date_logged = datetime.now() - timedelta(hours=3)
+            log_adm_view = datetime.strftime(date_logged, "%d-%m-%Y às %H:%M:%S")
+
+            user.login_dates.create(date_logged=log_adm_view)
+
+            user.save()
 
             # CÁLCULO VALIDADE ASSINATURA:
             signature_vality = user.signature_vality
@@ -69,10 +77,16 @@ class LoginSupplierView(APIView):
             if result.days >= 0:
                 if result.days > 15:
                     return Response({'token': token.key,
-                                    'signature_vality': signature_in_miliseconds, 'super_user': user.is_super_user})
+                                    'signature_vality': signature_in_miliseconds, 
+                                    'super_user': user.is_super_user,
+                                    })
 
                 elif result.days <= 15:
-                    return Response({"message": "Assinatura perto de vencer! Contatar suporte.", 'token': token.key, 'signature_vality': signature_in_miliseconds, 'super_user': user.is_super_user})
+                    return Response({"message": "Assinatura perto de vencer! Contatar suporte.", 
+                                     'token': token.key, 
+                                     'signature_vality': signature_in_miliseconds, 
+                                     'super_user': user.is_super_user, 
+                                     })
             
             else:
                 return Response({"message": "Assinatura vencida! Contatar suporte."}, status=status.HTTP_401_UNAUTHORIZED)
