@@ -160,7 +160,7 @@ AUTH_USER_MODEL = 'suppliers.Supplier'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:8000",
-    "http://dev-bi.vestsys.com.br.s3-website-us-east-1.amazonaws.com/"
+    "http://dev-bi.vestsys.com.br.s3-website-us-east-1.amazonaws.com"
 ]
 
 CORS_ALLOW_METHODS = [
@@ -189,7 +189,7 @@ EMAIL_USE_SSL = False
 AWS_ACCESS_KEY_ID = 'AKIAZ6XI6YUXXP46KH6U'
 # AWS_DEFAULT_ACL = None
 AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'devbi.api.vestsys.com.br'
+# AWS_STORAGE_BUCKET_NAME = 'devbi.api.vestsys.com.br'
 # AWS_S3_CUSTOM_DOMAIN = '%s.s3-website-us-east-1.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 # AWS_S3_FILE_OVERWRITE = False
 # AWS_S3_SIGNATURE_VERSION = 'AWS4-HMAC-SHA256'
