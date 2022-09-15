@@ -94,13 +94,15 @@ class LoginSupplierView(APIView):
                     return Response({'token': token.key,
                                     'signature_vality': signature_in_miliseconds, 
                                     'super_user': user.is_super_user,
+                                    'cnpj': user.cnpj,
                                     })
 
                 elif result.days <= 15:
                     return Response({"message": "Assinatura perto de vencer! Contatar suporte.", 
                                      'token': token.key, 
                                      'signature_vality': signature_in_miliseconds, 
-                                     'super_user': user.is_super_user, 
+                                     'super_user': user.is_super_user,
+                                     'cnpj': user.cnpj, 
                                      })
             
             else:
