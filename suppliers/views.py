@@ -44,6 +44,21 @@ class RegisterSupplierView(APIView):
         # PARA OS ADMINS FUTURAMENTE ACESSAREM AS INF VIA API.
 
 
+class SupplierByCNPJView(APIView):
+    def get(self, request, supplier_cnpj=''):
+        try:
+            supplier = Supplier.objects.get(cnpj=supplier_cnpj)
+
+            if supplier:
+                serialized = RegisterSupplierSerializer(supplier)
+
+                return Response(serialized.data, status=status.HTTP_200_OK)
+        # MELHORAR
+        except Supplier.DoesNotExist:
+            return Response({"message": "Fornecedor não registrado!"}, status=status.HTTP_404_NOT_FOUND)
+
+
+
 class LoginSupplierView(APIView):
     def post(self, request):
         serializer = LoginSupplierSerializer(data=request.data)
@@ -118,7 +133,7 @@ class AskChangePasswordMailView(APIView):
         object.save()
 
         # LINKS:
-        link_change_password = "http://localhost:3000/changepassword"
+        link_change_password = "http://dev-bi.vestsys.com.br.s3-website-us-east-1.amazonaws.com/changepassword"
 
         supplier_email_message = """\
             <html>
@@ -197,7 +212,7 @@ class ChangePasswordMailView(APIView):
         object2.save()
 
         # LINKS:
-        link_login = "http://localhost:3000/"
+        link_login = "http://dev-bi.vestsys.com.br.s3-website-us-east-1.amazonaws.com/"
 
         supplier_email_message = """\
             <html>
