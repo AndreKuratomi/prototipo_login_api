@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from dashboards.serializers import DashboardSerializer
+
 
 class LoggedSupplierSerializer(serializers.Serializer):
     date_logged = serializers.CharField()
@@ -26,14 +28,12 @@ class RegisterSupplierSerializer(serializers.Serializer):
     username_created_at = serializers.DateTimeField(read_only=True)
 
     login_dates = LoggedSupplierSerializer(many=True, required=False)
+    urls = DashboardSerializer(many=True, read_only=True)
 
 
 class LoginSupplierSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
-
-    # login_logged_at = serializers.DateTimeField() #BANCO DE DADO PARA VER QUANTAS VEZES LOGOU
-
 
 
 class AskChangePasswordSerializer(serializers.Serializer):
