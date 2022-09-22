@@ -56,7 +56,9 @@ class Supplier(AbstractUser):
 
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['cnpj', 'first_name', 'last_name', 'password', 'signature_status', 'signature_vality', 'is_super_user', 'url_dashboard', 'username']
+    REQUIRED_FIELDS = ['cnpj', 'first_name', 'last_name', 'password', 
+    # 'signature_status', 'signature_vality', 
+    'is_super_user', 'url_dashboard', 'username']
     objects = CustomUserManager()
 
 
