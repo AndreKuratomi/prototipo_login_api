@@ -57,6 +57,35 @@ class SupplierByCNPJView(APIView):
         except Supplier.DoesNotExist:
             return Response({"message": "Fornecedor não registrado!"}, status=status.HTTP_404_NOT_FOUND)
 
+    def patch(self, request, supplier_cnpj=''):
+        serializer = RegisterSupplierSerializer(data=request.data, partial=True)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            updated_supplier = Supplier.objects.filter(cnpj=supplier_cnpj).update(**serializer.validated_data)
+            updated = Supplier.objects.get(cnpj=supplier_cnpj)
+
+            serialized = RegisterSupplierSerializer(updated)
+            return Response(serialized.data, status=status.HTTP_200_OK)
+
+        except Supplier.DoesNotExist:
+            return Response({"message": "Fornecedor não registrado!"}, status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request, supplier_cnpj=''):
+        try:
+            supplier = Supplier.objects.get(cnpj=supplier_cnpj)
+
+            supplier.delete()
+            # Dashboard.remove()??
+
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        except Supplier.DoesNotExist:
+            return Response({"message": "Fornecedor não registrado!"}, status=status.HTTP_404_NOT_FOUND)
+
+
 
 
 class LoginSupplierView(APIView):

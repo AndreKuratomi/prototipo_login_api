@@ -28,7 +28,6 @@ class RegisterDashboardView(APIView):
 
         new_dashboard = user[0].dashboards.create(**serializer.validated_data)
         user[0].save()
-        # ipdb.set_trace()
 
         serializer = DashboardSerializer(new_dashboard)
 
@@ -43,8 +42,6 @@ class RegisterDashboardView(APIView):
 
 class DashboardByIdView(APIView):
     def get(self, request, dashboard_id=''):
-        print(dashboard_id)
-        # if type(dashboard_id) is int:
         try:
             dashboard = Dashboard.objects.get(id=dashboard_id)
             serialized = DashboardSerializer(dashboard)
@@ -54,12 +51,25 @@ class DashboardByIdView(APIView):
         except Dashboard.DoesNotExist:
             return Response({"message": "Dashboard não registrado!"}, status=status.HTTP_404_NOT_FOUND)
 
-    # def patch(self, request, dashboard_id=''):
+    def patch(self, request, dashboard_id=''):
+        serializer = DashboardSerializer(data=request.data, partial=True)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            updated_dashboard = Dashboard.objects.filter(id=dashboard_id).update(**serializer.validated_data)
+            updated = Dashboard.objects.get(id=dashboard_id)
+
+            serialized = DashboardSerializer(updated)
+            return Response(serialized.data, status=status.HTTP_200_OK)
+
+        except Dashboard.DoesNotExist:
+            return Response({"message": "Dashboard não registrado!"}, status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, dashboard_id=''):
         try:
             dashboard = Dashboard.objects.get(id=dashboard_id)
-            # ipdb.set_trace()
 
             dashboard.delete()
             # Dashboard.remove()??
@@ -74,7 +84,7 @@ class DashboardByCategoryView(APIView):
     def get(self, request, dashboard_category=''):
         try:
             adjusted_query = dashboard_category.strip().lower()
-            print(adjusted_query)
+
             dashboard = Dashboard.objects.get(category=adjusted_query)
             serialized = DashboardSerializer(dashboard)
 
@@ -83,3 +93,25 @@ class DashboardByCategoryView(APIView):
         except Dashboard.DoesNotExist:
             return Response({"message": "Dashboard não registrado!"}, status=status.HTTP_404_NOT_FOUND)
 
+
+class DashboardEditFavoriteView(APIView):
+    def patch(self, request, dashboard_id=''):
+        serializer = DashboardSerializer(data=request.data, partial=True)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            dashboard = Dashboard.objects.get(id=dashboard_id)
+            # ipdb.set_trace()
+            if dashboard.is_favorite is False:
+                dashboard.is_favorite = True
+            else:
+                dashboard.is_favorite = False
+            dashboard.save(update_fields=['is_favorite'])
+
+            serialized = DashboardSerializer(dashboard)
+            return Response(serialized.data, status=status.HTTP_200_OK)
+
+        except Dashboard.DoesNotExist:
+            return Response({"message": "Dashboard não registrado!"}, status=status.HTTP_404_NOT_FOUND)
