@@ -28,7 +28,7 @@ class RegisterSupplierSerializer(serializers.Serializer):
     username_created_at = serializers.DateTimeField(read_only=True)
 
     login_dates = LoggedSupplierSerializer(many=True, required=False)
-    urls = DashboardSerializer(many=True, read_only=True)
+    dashboards = DashboardSerializer(many=True, read_only=True)
 
 
 class LoginSupplierSerializer(serializers.Serializer):
