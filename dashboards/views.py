@@ -4,9 +4,12 @@ from rest_framework.views import APIView
 
 from .models import Dashboard
 from .serializers import DashboardSerializer
+from suppliers.models import Supplier
+
+import ipdb
 
 
-class RegisterDashboardView():
+class RegisterDashboardView(APIView):
     def post(self, request):
         serializer = DashboardSerializer(data=request.data)
 
@@ -17,8 +20,17 @@ class RegisterDashboardView():
         if find_dashboard_url is True:
             return Response({"message": "Dashboard já registrada!"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
-        dashboard = Dashboard.objects.create(**serializer.validated_data)
-        serializer = DashboardSerializer(dashboard)
+        # dashboard = Dashboard.objects.create(**serializer.validated_data)
+
+        user = Supplier.objects.filter(cnpj = serializer.validated_data['supplier_owner'])
+        if user.exists() is False:
+            return Response({"message": "Fornecedor não encontrado! Verificar dados."}, status=status.HTTP_404_NOT_FOUND)
+
+        new_dashboard = user[0].dashboards.create(**serializer.validated_data)
+        user[0].save()
+        # ipdb.set_trace()
+
+        serializer = DashboardSerializer(new_dashboard)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -31,11 +43,13 @@ class RegisterDashboardView():
 
 class DashboardByIdView(APIView):
     def get(self, request, dashboard_id=''):
+        print(dashboard_id)
+        # if type(dashboard_id) is int:
         try:
             dashboard = Dashboard.objects.get(id=dashboard_id)
             serialized = DashboardSerializer(dashboard)
 
-                return Response(serialized.data, state=status.HTTP_200_OK)
+            return Response(serialized.data, status=status.HTTP_200_OK)
 
         except Dashboard.DoesNotExist:
             return Response({"message": "Dashboard não registrado!"}, status=status.HTTP_404_NOT_FOUND)
@@ -43,26 +57,28 @@ class DashboardByIdView(APIView):
     # def patch(self, request, dashboard_id=''):
 
     def delete(self, request, dashboard_id=''):
-            try:
-                dashboard = Dashboard.objects.get(id=dashboard_id)
-                Dashboard.delete(dashboard)
-                # Dashboard.remove()??
+        try:
+            dashboard = Dashboard.objects.get(id=dashboard_id)
+            # ipdb.set_trace()
 
-                return Response(state=status.HTTP_204_NO_CONTENT)
+            dashboard.delete()
+            # Dashboard.remove()??
 
-            except Dashboard.DoesNotExist:
-                return Response({"message": "Dashboard não registrado!"}, status=status.HTTP_404_NOT_FOUND)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        except Dashboard.DoesNotExist:
+            return Response({"message": "Dashboard não registrado!"}, status=status.HTTP_404_NOT_FOUND)
 
 
 class DashboardByCategoryView(APIView):
     def get(self, request, dashboard_category=''):
         try:
-            adjusted_query = dashboard_category.lower()
-
-            dashboard = Dashboard.objects.get(category=dashboard_category)
+            adjusted_query = dashboard_category.strip().lower()
+            print(adjusted_query)
+            dashboard = Dashboard.objects.get(category=adjusted_query)
             serialized = DashboardSerializer(dashboard)
 
-                return Response(serialized.data, state=status.HTTP_200_OK)
+            return Response(serialized.data, status=status.HTTP_200_OK)
 
         except Dashboard.DoesNotExist:
             return Response({"message": "Dashboard não registrado!"}, status=status.HTTP_404_NOT_FOUND)
