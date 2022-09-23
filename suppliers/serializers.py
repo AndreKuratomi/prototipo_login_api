@@ -15,14 +15,13 @@ class RegisterSupplierSerializer(serializers.Serializer):
     last_name = serializers.CharField()
 
     password = serializers.CharField(write_only=True)
-    # password_provisional = serializers.CharField() # como fazer para ter duração definida??
+    # password_provisional = serializers.CharField() # COMO FAZER PARA TER DURAÇÃO DEFINIDA??
     
-    signature_created_at = serializers.DateTimeField(read_only=True) # ele pode ser registrado sem ter assinatura?
-    signature_vality = serializers.CharField()
+    signature_vality = serializers.CharField(required=False)
+    signature_created_at = serializers.DateTimeField(read_only=True)
     
+    is_admin = serializers.BooleanField()
     is_super_user = serializers.BooleanField()
-    
-    url_dashboard = serializers.URLField() # como automatizar para o PBI fornecê-lo???
     
     username = serializers.CharField()
     username_created_at = serializers.DateTimeField(read_only=True)
@@ -41,7 +40,7 @@ class AskChangePasswordSerializer(serializers.Serializer):
 
 
 class ChangePasswordSerializer(serializers.Serializer):
-    password_provisional = serializers.CharField() # como fazer para ter duração definida??
+    password_provisional = serializers.CharField() # COMO FAZER PARA TER DURAÇÃO DEFINIDA??
     new_password = serializers.CharField()
     repeat_new_password = serializers.CharField()
 

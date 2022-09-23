@@ -25,7 +25,7 @@ class RegisterSupplierView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        find_supplier = Supplier.objects.filter(email=serializer.validated_data['email']).exists()
+        find_supplier = Supplier.objects.filter(cnpj=serializer.validated_data['cnpj']).exists()
         if find_supplier is True:
             return Response({"message": "Fornecedor já registrado!"}, status.HTTP_422_UNPROCESSABLE_ENTITY)
         
@@ -108,6 +108,15 @@ class LoginSupplierView(APIView):
 
             user.save()
 
+            #VERIFICAÇÃO SE USUÁRIO É SUPER_USER:
+            if user.is_super_user is True or user.is_admin is True:
+                return Response({'token': token.key,
+                # 'signature_vality': signature_in_miliseconds, 
+                'super_user': user.is_super_user,
+                'is_admin': user.is_admin,
+                'cnpj': user.cnpj,
+                })
+            
             # CÁLCULO VALIDADE ASSINATURA:
             signature_vality = user.signature_vality
             
@@ -122,7 +131,6 @@ class LoginSupplierView(APIView):
                 if result.days > 15:
                     return Response({'token': token.key,
                                     'signature_vality': signature_in_miliseconds, 
-                                    'super_user': user.is_super_user,
                                     'cnpj': user.cnpj,
                                     })
 
@@ -130,7 +138,6 @@ class LoginSupplierView(APIView):
                     return Response({"message": "Assinatura perto de vencer! Contatar suporte.", 
                                      'token': token.key, 
                                      'signature_vality': signature_in_miliseconds, 
-                                     'super_user': user.is_super_user,
                                      'cnpj': user.cnpj, 
                                      })
             
