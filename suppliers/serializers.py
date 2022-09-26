@@ -17,8 +17,8 @@ class RegisterSupplierSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
     # password_provisional = serializers.CharField() # COMO FAZER PARA TER DURAÇÃO DEFINIDA??
     
-    signature_vality = serializers.CharField(required=False)
     signature_created_at = serializers.DateTimeField(read_only=True)
+    signature_vality = serializers.CharField(required=False)
     
     is_admin = serializers.BooleanField()
     is_super_user = serializers.BooleanField()

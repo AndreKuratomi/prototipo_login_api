@@ -9,6 +9,7 @@ import uuid
 import ipdb
 
 accurate_time = datetime.now() - timedelta(hours=3)
+print(accurate_time)
 log_adm_view = datetime.strftime(accurate_time, "%d-%m-%Y às %H:%M:%S")
 
 class CustomUserManager(BaseUserManager):

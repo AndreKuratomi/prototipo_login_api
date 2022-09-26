@@ -119,14 +119,19 @@ class LoginSupplierView(APIView):
             
             # CÁLCULO VALIDADE ASSINATURA:
             signature_vality = user.signature_vality
-            
-            date_signed = datetime.strptime(signature_vality, "%Y-%d-%mT%H:%M:%S.%fZ")
+            # print(signature_vality)
+            date_signed = datetime.strptime(signature_vality, "%Y-%m-%dT%H:%M:%S.%fZ")
+            # PESQUISAR prefetch_related() PARA POSSIBILIDADE DE MAIS DE UMA URL!
+            # print(date_signed)
+
             date_now = datetime.now() - timedelta(hours=3)
+            # print(date_now)
 
             result = date_signed - date_now
+            # print(result)
 
             signature_in_miliseconds = date_signed.timestamp()
-
+            # print(user.dashboards[0])
             if result.days >= 0:
                 if result.days > 15:
                     return Response({'token': token.key,

@@ -44,6 +44,7 @@ class DashboardByIdView(APIView):
     def get(self, request, dashboard_id=''):
         try:
             dashboard = Dashboard.objects.get(id=dashboard_id)
+            # PESQUISAR prefetch_related() PARA POSSIBILIDADE DE MAIS DE UMA URL!
             serialized = DashboardSerializer(dashboard)
 
             return Response(serialized.data, status=status.HTTP_200_OK)
