@@ -67,6 +67,16 @@ class LoggedSupplier(models.Model):
     supplier = models.ForeignKey("Supplier", blank=True, on_delete=models.CASCADE, related_name="login_dates")
 
 
+# class SuperUserFavorites(models.Model):
+#     date_logged = models.CharField(max_length=255)
+#     supplier = models.ForeignKey("Supplier", blank=True, null=True, on_delete=models.CASCADE, related_name="favorite_dashboards")
+
+
+# class SuperUserLastVisited(models.Model):
+#     date_logged = models.CharField(max_length=255)
+#     supplier = models.ForeignKey("Supplier", blank=True, null=True, on_delete=models.CASCADE, related_name="last_visited_dashboards")
+
+
 # class CustomUserManager(BaseUserManager):
 #     def _create_user(self, email, password, is_super_user=False, is_admin=False, **extra_fields):
 #         now = timezone.now()

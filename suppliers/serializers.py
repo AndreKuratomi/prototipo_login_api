@@ -7,16 +7,24 @@ class LoggedSupplierSerializer(serializers.Serializer):
     date_logged = serializers.CharField()
 
 
+class FavoritesSupplierSerializer(serializers.Serializer):
+    date_logged = serializers.CharField()
+
+
+class LastVisitedSupplierSerializer(serializers.Serializer):
+    date_logged = serializers.CharField()
+
+
 class RegisterSupplierSerializer(serializers.Serializer):
     cnpj = serializers.CharField() #PK!
     email = serializers.EmailField()
-    franquia = serializers.CharField()
     first_name = serializers.CharField()
     last_name = serializers.CharField()
 
     password = serializers.CharField(write_only=True)
     # password_provisional = serializers.CharField() # COMO FAZER PARA TER DURAÇÃO DEFINIDA??
     
+    franquia = serializers.CharField(required=False)
     signature_created_at = serializers.DateTimeField(read_only=True)
     signature_vality = serializers.CharField(required=False)
     
@@ -28,6 +36,9 @@ class RegisterSupplierSerializer(serializers.Serializer):
 
     login_dates = LoggedSupplierSerializer(many=True, required=False)
     dashboards = DashboardSerializer(many=True, read_only=True)
+
+    favorite_dashboards = DashboardSerializer(many=True, read_only=True)
+    last_visited_dashboards = DashboardSerializer(many=True, read_only=True)
 
 
 class LoginSupplierSerializer(serializers.Serializer):

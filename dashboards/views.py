@@ -95,24 +95,40 @@ class DashboardByCategoryView(APIView):
             return Response({"message": "Dashboard não registrado!"}, status=status.HTTP_404_NOT_FOUND)
 
 
+# class LastVisitedDashboardView(APIView):
+#     def post
+
+
 class DashboardEditFavoriteView(APIView):
     def patch(self, request, dashboard_id=''):
-        serializer = DashboardSerializer(data=request.data, partial=True)
 
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        super_user = Supplier.objects.filter(is_super_user=True)
+        if super_user is False:
+            return Response({"message": "Fornecedor não encontrado! Verificar dados."}, status=status.HTTP_404_NOT_FOUND)
+
+        # serializer = DashboardSerializer(data=request.data, partial=True)
+        # if not serializer.is_valid():
+        #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             dashboard = Dashboard.objects.get(id=dashboard_id)
-            # ipdb.set_trace()
-            if dashboard.is_favorite is False:
+            print(dashboard.is_favorite)
+            if dashboard.is_favorite == False:
                 dashboard.is_favorite = True
+                dashboard.save(update_fields=['is_favorite'])
+
+                super_user[0].favorite_dashboards.add(dashboard)
+                super_user[0].save()
+
+                return Response(status=status.HTTP_200_OK)
+
             else:
                 dashboard.is_favorite = False
-            dashboard.save(update_fields=['is_favorite'])
+                dashboard.save(update_fields=['is_favorite'])
 
-            serialized = DashboardSerializer(dashboard)
-            return Response(serialized.data, status=status.HTTP_200_OK)
+                super_user[0].favorite_dashboards.remove(dashboard)
+
+                return Response(status=status.HTTP_204_NO_CONTENT)
 
         except Dashboard.DoesNotExist:
             return Response({"message": "Dashboard não registrado!"}, status=status.HTTP_404_NOT_FOUND)

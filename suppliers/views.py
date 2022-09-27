@@ -86,8 +86,6 @@ class SupplierByCNPJView(APIView):
             return Response({"message": "Fornecedor não registrado!"}, status=status.HTTP_404_NOT_FOUND)
 
 
-
-
 class LoginSupplierView(APIView):
     def post(self, request):
         serializer = LoginSupplierSerializer(data=request.data)
