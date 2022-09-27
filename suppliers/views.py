@@ -86,8 +86,6 @@ class SupplierByCNPJView(APIView):
             return Response({"message": "Fornecedor não registrado!"}, status=status.HTTP_404_NOT_FOUND)
 
 
-
-
 class LoginSupplierView(APIView):
     def post(self, request):
         serializer = LoginSupplierSerializer(data=request.data)
@@ -111,7 +109,6 @@ class LoginSupplierView(APIView):
             #VERIFICAÇÃO SE USUÁRIO É SUPER_USER:
             if user.is_super_user is True or user.is_admin is True:
                 return Response({'token': token.key,
-                # 'signature_vality': signature_in_miliseconds, 
                 'super_user': user.is_super_user,
                 'is_admin': user.is_admin,
                 'cnpj': user.cnpj,
@@ -119,8 +116,8 @@ class LoginSupplierView(APIView):
             
             # CÁLCULO VALIDADE ASSINATURA:
             signature_vality = user.signature_vality
-            
-            date_signed = datetime.strptime(signature_vality, "%Y-%d-%mT%H:%M:%S.%fZ")
+            date_signed = datetime.strptime(signature_vality, "%Y-%m-%dT%H:%M:%S.%fZ")
+
             date_now = datetime.now() - timedelta(hours=3)
 
             result = date_signed - date_now

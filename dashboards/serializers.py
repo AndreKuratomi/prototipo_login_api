@@ -10,5 +10,3 @@ class DashboardSerializer(serializers.Serializer):
     created_at = serializers.DateTimeField(read_only=True)
     supplier_owner = serializers.CharField()
     
-
-    # REQUIRED_FIELDS = ['__all__']
