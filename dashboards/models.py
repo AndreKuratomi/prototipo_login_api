@@ -5,10 +5,9 @@ from datetime import datetime, timedelta
 
 from suppliers.models import Supplier
 
-
 local_time = datetime.now() - timedelta(hours=3)
 
-# class CustomUserManager(BaseUserManager):
+
 class Dashboard(models.Model):
     id = models.IntegerField(primary_key=True)
     category = models.CharField(max_length=255)
@@ -19,6 +18,7 @@ class Dashboard(models.Model):
 
     created_at = models.DateTimeField(default=local_time)
     
-    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, related_name="dashboards", null=True)
-
+    supplier1 = models.ForeignKey(Supplier, null=True, on_delete=models.CASCADE, related_name="dashboards")
+    supplier2 = models.ForeignKey(Supplier, null=True, on_delete=models.CASCADE, related_name="favorite_dashboards")
+    supplier3 = models.ForeignKey(Supplier, null=True, on_delete=models.CASCADE, related_name="last_visited_dashboards")
     # REQUIRED_FIELDS = ['__all__']
