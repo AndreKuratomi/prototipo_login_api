@@ -111,7 +111,6 @@ class LoginSupplierView(APIView):
             #VERIFICAÇÃO SE USUÁRIO É SUPER_USER:
             if user.is_super_user is True or user.is_admin is True:
                 return Response({'token': token.key,
-                # 'signature_vality': signature_in_miliseconds, 
                 'super_user': user.is_super_user,
                 'is_admin': user.is_admin,
                 'cnpj': user.cnpj,
@@ -119,19 +118,14 @@ class LoginSupplierView(APIView):
             
             # CÁLCULO VALIDADE ASSINATURA:
             signature_vality = user.signature_vality
-            # print(signature_vality)
             date_signed = datetime.strptime(signature_vality, "%Y-%m-%dT%H:%M:%S.%fZ")
-            # PESQUISAR prefetch_related() PARA POSSIBILIDADE DE MAIS DE UMA URL!
-            # print(date_signed)
 
             date_now = datetime.now() - timedelta(hours=3)
-            # print(date_now)
 
             result = date_signed - date_now
-            # print(result)
 
             signature_in_miliseconds = date_signed.timestamp()
-            # print(user.dashboards[0])
+
             if result.days >= 0:
                 if result.days > 15:
                     return Response({'token': token.key,
