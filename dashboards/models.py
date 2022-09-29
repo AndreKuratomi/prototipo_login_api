@@ -17,6 +17,8 @@ class Dashboard(models.Model):
     supplier_owner = models.CharField(max_length=255)
 
     created_at = models.DateTimeField(default=local_time)
+
+    last_clicked = models.DateTimeField(default=local_time)
     
     supplier1 = models.ForeignKey(Supplier, null=True, on_delete=models.CASCADE, related_name="dashboards")
     supplier2 = models.ForeignKey(Supplier, null=True, on_delete=models.CASCADE, related_name="favorite_dashboards")

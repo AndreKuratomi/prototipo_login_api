@@ -157,18 +157,21 @@ AUTH_USER_MODEL = 'suppliers.Supplier'
 
 # CORS
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:8000",
-    "http://dev-bi.vestsys.com.br.s3-website-us-east-1.amazonaws.com"
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+#     "http://127.0.0.1:8000",
+#     "http://dev-bi.vestsys.com.br.s3-website-us-east-1.amazonaws.com"
+# ]
 
-CORS_ALLOW_METHODS = [
-    "GET",
-    "PATCH"
-    "POST",
-    "PUT",
-]
+CORS_ORIGIN_ALLOW_ALL = True
+
+# CORS_ALLOW_METHODS = [
+#     "DELETE",
+#     "GET",
+#     "PATCH"
+#     "POST",
+#     "PUT",
+# ]
 
 
 # Emails

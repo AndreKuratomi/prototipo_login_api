@@ -7,6 +7,9 @@ class DashboardSerializer(serializers.Serializer):
     is_favorite = serializers.BooleanField(default=False)
     name = serializers.CharField()
     url = serializers.URLField()
+
     created_at = serializers.DateTimeField(read_only=True)
+    last_clicked = serializers.DateTimeField(read_only=True)
+    
     supplier_owner = serializers.CharField()
     
