@@ -2,6 +2,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from datetime import datetime, timedelta
+
 from .models import Dashboard
 from .serializers import DashboardSerializer
 from suppliers.models import Supplier
@@ -58,6 +60,10 @@ class DashboardByIdView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+        super_user = Supplier.objects.filter(is_super_user=True)
+        if super_user is False:
+            return Response({"message": "Fornecedor não encontrado! Verificar dados."}, status=status.HTTP_404_NOT_FOUND)
+
         try:
             updated_dashboard = Dashboard.objects.filter(id=dashboard_id).update(**serializer.validated_data)
             updated = Dashboard.objects.get(id=dashboard_id)
@@ -86,17 +92,53 @@ class DashboardByCategoryView(APIView):
         try:
             adjusted_query = dashboard_category.strip().lower()
 
-            dashboard = Dashboard.objects.get(category=adjusted_query)
-            serialized = DashboardSerializer(dashboard)
+            dashboard = Dashboard.objects.filter(category=adjusted_query)
+            # ipdb.set_trace()
+            if dashboard.count() > 0:
+                serialized = DashboardSerializer(dashboard, many=True)
 
-            return Response(serialized.data, status=status.HTTP_200_OK)
+                return Response(serialized.data, status=status.HTTP_200_OK)
+            else:
+                return Response({"message": "Nada encontrado!"}, status=status.HTTP_404_NOT_FOUND)
 
         except Dashboard.DoesNotExist:
             return Response({"message": "Dashboard não registrado!"}, status=status.HTTP_404_NOT_FOUND)
 
 
-# class LastVisitedDashboardView(APIView):
-#     def post
+class LastVisitedDashboardView(APIView):
+    def patch(self, request, dashboard_id=''):
+        serializer = DashboardSerializer(data=request.data, partial=True)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        super_user = Supplier.objects.filter(is_super_user=True)
+        if super_user is False:
+            return Response({"message": "Fornecedor não encontrado! Verificar dados."}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            updated_dashboard = Dashboard.objects.filter(id=dashboard_id).update(**serializer.validated_data)
+            updated = Dashboard.objects.get(id=dashboard_id)
+
+            last_list = super_user[0].last_visited_dashboards
+            super_list = []
+            ipdb.set_trace()
+
+            if last_list.len < 3:
+                last_list.add(updated)
+                super_user[0].save()
+
+            elif last_list.len == 3:
+                last_list.remove(last_list[0])
+                last_list.add(updated)
+                super_user[0].save()
+
+
+            serialized = DashboardSerializer(updated)
+            return Response(serialized.data, status=status.HTTP_200_OK)
+
+        except Dashboard.DoesNotExist:
+            return Response({"message": "Dashboard não registrado!"}, status=status.HTTP_404_NOT_FOUND)
 
 
 class DashboardEditFavoriteView(APIView):
@@ -120,7 +162,9 @@ class DashboardEditFavoriteView(APIView):
                 super_user[0].favorite_dashboards.add(dashboard)
                 super_user[0].save()
 
-                return Response(status=status.HTTP_200_OK)
+                serialized = DashboardSerializer(dashboard)
+
+                return Response(serialized.data, status=status.HTTP_200_OK)
 
             else:
                 dashboard.is_favorite = False
@@ -128,7 +172,9 @@ class DashboardEditFavoriteView(APIView):
 
                 super_user[0].favorite_dashboards.remove(dashboard)
 
-                return Response(status=status.HTTP_204_NO_CONTENT)
+                serialized = DashboardSerializer(dashboard)
+
+                return Response(serialized.data, status=status.HTTP_200_OK)
 
         except Dashboard.DoesNotExist:
             return Response({"message": "Dashboard não registrado!"}, status=status.HTTP_404_NOT_FOUND)
