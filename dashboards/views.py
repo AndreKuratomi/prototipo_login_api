@@ -112,29 +112,52 @@ class LastVisitedDashboardView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        super_user = Supplier.objects.filter(is_super_user=True)
+        super_user = Supplier.objects.get(is_super_user=True)
         if super_user is False:
             return Response({"message": "Fornecedor não encontrado! Verificar dados."}, status=status.HTTP_404_NOT_FOUND)
 
         try:
-            updated_dashboard = Dashboard.objects.filter(id=dashboard_id).update(**serializer.validated_data)
-            updated = Dashboard.objects.get(id=dashboard_id)
+            update = Dashboard.objects.get(id=dashboard_id)
+            update.last_clicked = datetime.now() - timedelta(hours=3)
+            update.save(update_fields=['last_clicked'])
 
-            last_list = super_user[0].last_visited_dashboards
-            super_list = []
-            ipdb.set_trace()
+            last_list = super_user.last_visited_dashboards
+            list_content = last_list.all()
 
-            if last_list.len < 3:
-                last_list.add(updated)
-                super_user[0].save()
+            if list_content.count() < 3:
+                last_list.add(update)
+                super_user.save()
 
-            elif last_list.len == 3:
-                last_list.remove(last_list[0])
-                last_list.add(updated)
-                super_user[0].save()
+            elif list_content.count() == 3:
+                last = str(list_content[0].last_clicked)[0:26]
+                date_now = datetime.now() - timedelta(hours=3)
+                date_clicked = datetime.strptime(last, "%Y-%m-%d %H:%M:%S.%f")
+
+                final_result = date_now - date_clicked
 
 
-            serialized = DashboardSerializer(updated)
+                for value in list_content:
+                    date_now = datetime.now() - timedelta(hours=3)
+                    date_clicked = datetime.strptime(str(value.last_clicked)[0:26], "%Y-%m-%d %H:%M:%S.%f")
+
+                    result_1 = date_now - date_clicked
+                    print(result_1)
+
+                    if result_1 > final_result:
+                        last = value
+                        print(last)
+
+                last_list.remove(last)
+                last_list.add(update)
+
+                super_user.save()
+
+            last_list.order_by('last_clicked').reverse()
+            # ipdb.set_trace()
+            # super_user.save()
+
+
+            serialized = DashboardSerializer(update)
             return Response(serialized.data, status=status.HTTP_200_OK)
 
         except Dashboard.DoesNotExist:
