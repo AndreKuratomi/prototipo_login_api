@@ -2,7 +2,7 @@ venv/
 
 *__pycache__
 
-*/migrations/000*
+*/migrations/00*
 
 node_modules/
 
