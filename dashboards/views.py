@@ -147,10 +147,14 @@ class LastVisitedDashboardView(APIView):
                         last = value
                         print(last)
 
-                # ipdb.set_trace()
                 last_list.remove(last)
                 last_list.add(update)
+
                 super_user.save()
+
+            last_list.order_by('last_clicked').reverse()
+            # ipdb.set_trace()
+            # super_user.save()
 
 
             serialized = DashboardSerializer(update)
