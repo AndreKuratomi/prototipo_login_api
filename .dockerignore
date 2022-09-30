@@ -1,9 +1,10 @@
 venv/
+node_modules/
 
 *__pycache__
+*.pyc
 
 */migrations/00*
 
-node_modules/
-
+.git
 .env
