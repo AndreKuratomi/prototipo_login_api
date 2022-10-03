@@ -8,6 +8,9 @@ from datetime import datetime, timedelta
 import uuid
 import ipdb
 
+print(timezone.now())
+print(datetime.now())
+
 accurate_time = datetime.now() - timedelta(hours=3)
 
 log_adm_view = datetime.strftime(accurate_time, "%d-%m-%Y às %H:%M:%S")
@@ -45,14 +48,14 @@ class Supplier(AbstractUser):
     password_provisional = models.CharField(default=uuid.uuid4, max_length=255, blank=True) # como fazer para ter duração definida??
 
     franquia = models.CharField(max_length=255, blank=True)
-    signature_created_at = models.DateTimeField(default=datetime.now() - timedelta(hours=3), max_length=255, null=False)
+    signature_created_at = models.DateTimeField(default=datetime.now(), max_length=255, null=False)
     signature_vality = models.CharField(max_length=255)
     
     is_admin = models.BooleanField(default=False)
     is_super_user = models.BooleanField(default=False)
         
     username = models.CharField(max_length=255, null=True, unique=False)
-    username_created_at = models.DateTimeField(default=datetime.now() - timedelta(hours=3))
+    username_created_at = models.DateTimeField(default=datetime.now())
 
 
     USERNAME_FIELD = 'email'
