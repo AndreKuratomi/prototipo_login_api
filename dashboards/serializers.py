@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 
 class DashboardSerializer(serializers.Serializer):
-    id = serializers.IntegerField() #PK!
+    id = serializers.IntegerField(read_only=True) #PK!
     category = serializers.CharField()
     is_favorite = serializers.BooleanField(default=False)
     name = serializers.CharField()
