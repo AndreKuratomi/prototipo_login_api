@@ -13,9 +13,9 @@ class Dashboard(models.Model):
     url = models.URLField(max_length=255, unique=True)
     supplier_owner = models.CharField(max_length=255)
 
-    created_at = models.DateTimeField(default=datetime.now())
+    created_at = models.DateTimeField(auto_now_add=True)
 
-    last_clicked = models.DateTimeField(default=datetime.now())
+    last_clicked = models.DateTimeField(auto_now=True)
     
     supplier1 = models.ForeignKey(Supplier, null=True, on_delete=models.CASCADE, related_name="dashboards")
     supplier2 = models.ForeignKey(Supplier, null=True, on_delete=models.CASCADE, related_name="favorite_dashboards")
