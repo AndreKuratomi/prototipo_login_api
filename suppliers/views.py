@@ -14,6 +14,7 @@ from suppliers.serializers import RegisterSupplierSerializer, LoginSupplierSeria
 from .models import Supplier, LoggedSupplier
 
 from datetime import datetime, timedelta
+
 import uuid
 import ipdb
 
@@ -99,7 +100,7 @@ class LoginSupplierView(APIView):
             token = Token.objects.get_or_create(user=user)[0]
 
             # DATA E HORA LOGADAS:
-            date_logged = datetime.now() - timedelta(hours=3)
+            date_logged = datetime.now()
             log_adm_view = datetime.strftime(date_logged, "%d-%m-%Y às %H:%M:%S")
 
             user.login_dates.create(date_logged=log_adm_view)
@@ -118,11 +119,12 @@ class LoginSupplierView(APIView):
             signature_vality = user.signature_vality
             date_signed = datetime.strptime(signature_vality, "%Y-%m-%dT%H:%M:%S.%fZ")
 
-            date_now = datetime.now() - timedelta(hours=3)
+            date_now = datetime.now()
 
             result = date_signed - date_now
 
             signature_in_miliseconds = date_signed.timestamp()
+            # ipdb.set_trace()
 
             if result.days >= 0:
                 if result.days > 15:
@@ -156,9 +158,10 @@ class AskChangePasswordMailView(APIView):
         reducedUUID = str(uuid.uuid4())[0:8] # E COMO GARANTIR QUE ELA TERÁ UM PRAZO?
 
         # FORMATAÇÃO DE DATA:
-        dia = (timezone.now() - timedelta(hours=3)).strftime("%d/%m/%Y")
-        horas = (timezone.now() - timedelta(hours=3)).strftime("%H:%M:%S")
-
+        dia = (datetime.now()).strftime("%d/%m/%Y")
+        horas = (datetime.now()).strftime("%H:%M:%S")
+        print(dia)
+        print(horas)
         # PARA OBTER USERNAME PELO EMAIL:
         object = Supplier.objects.get(email=request.data['email'])
 
@@ -168,7 +171,8 @@ class AskChangePasswordMailView(APIView):
         object.save()
 
         # LINKS:
-        link_change_password = "http://dev-bi.vestsys.com.br.s3-website-us-east-1.amazonaws.com/changepassword"
+        link_change_password = "http://localhost:3000/changepassword"
+        # link_change_password = "http://dev-bi.vestsys.com.br.s3-website-us-east-1.amazonaws.com/changepassword"
 
         supplier_email_message = """\
             <html>
@@ -227,8 +231,8 @@ class ChangePasswordMailView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         # FORMATAÇÃO DE DATA:
-        dia = (timezone.now() - timedelta(hours=3)).strftime("%d/%m/%Y")
-        horas = (timezone.now() - timedelta(hours=3)).strftime("%H:%M:%S")
+        dia = (datetime.now()).strftime("%d/%m/%Y")
+        horas = (datetime.now()).strftime("%H:%M:%S")
 
         # PARA OBTER USERNAME PELA SENHA PROVISÓRIA:
         # ipdb.set_trace()
@@ -247,7 +251,8 @@ class ChangePasswordMailView(APIView):
         object2.save()
 
         # LINKS:
-        link_login = "http://dev-bi.vestsys.com.br.s3-website-us-east-1.amazonaws.com/"
+        link_login = "http://localhost:3000/"
+        # link_login = "http://dev-bi.vestsys.com.br.s3-website-us-east-1.amazonaws.com/"
 
         supplier_email_message = """\
             <html>
