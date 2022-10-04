@@ -85,3 +85,74 @@ Esse projeto atende a fins exclusivamente didáticos e sem nenhum intuito comerc
 - [JWT](https://github.com/auth0/node-jsonwebtoken)
 - [Bcrypt](https://github.com/kelektiv/node.bcrypt.js)
 - [Dotenv](https://www.npmjs.com/package/dotenv)
+mazon Web Service (AWS) S3:
+
+Getting started with Amazon S3 - Amazon Simple Storage Service 
+
+Hosting a static website using Amazon S3 - Amazon Simple Storage Service 
+
+A guide to deploying your React App with AWS S3 (Including HTTPS, a Custom Domain, a CDN and… 
+
+Amazon Web Service (AWS) EC2:
+
+https://docs.aws.amazon.com/ec2/index.html
+
+How to delete and recreate a postgres database using a single docker command? 
+
+Bcrypt:
+
+npm: bcryptjs 
+
+Tua-Body-Scroll-Lock:
+
+ npm: tua-body-scroll-lock 
+
+Chakra-UI (Toast):
+
+Toast 
+
+Current screen size:
+
+How To Get The Current Screen Size/Browser Window 
+
+Django:
+
+Django documentation | Django documentation | Django 
+
+DjangoMail:
+
+Sending email | Django documentation | Django 
+
+Figma:
+
+Figma: the collaborative interface design tool. 
+
+3 Simple ways to export your images in Figma 
+
+Formatação README:
+
+Markdown Cheatsheet · adam-p/markdown-here Wiki 
+
+Iframe PowerBI:
+
+Aprenda a deixar o Power Bi ainda melhor na Televisão! 
+
+Links bloqueio de comandos teclado:
+
+KeyboardEvent.keyCode - Web APIs | MDN 
+
+Disable right click and F12 key using JavaScript - Clue Mediator 
+
+Material-UI:
+
+Material-UI: Um framework popular de React UI [v4] 
+
+Referências Javascript:
+
+JavaScript reference - JavaScript | MDN 
+
+Typescript:
+
+Documentation - Overview 
+
+ 
