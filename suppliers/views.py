@@ -226,12 +226,22 @@ class AskChangePasswordMailView(APIView):
 
 
 class EmailForAskChangePasswordView(APIView):
-    def get(self, request, user_email=''):
+    def patch(self, request, user_email=''):
         try:
             user = Supplier.objects.get(email=user_email)
             if user:
-                serialized = RegisterSupplierSerializer(user)
-                return Response(serialized.data, status=status.HTTP_200_OK)
+                if user.asked_change_password == False:
+                    user.asked_change_password = True
+                    user.save(update_fields=['asked_change_password'])
+                    serialized = RegisterSupplierSerializer(user)
+                    return Response(serialized.data, status=status.HTTP_200_OK)
+
+                else:
+                    user.asked_change_password = False
+                    user.save(update_fields=['asked_change_password'])
+                    
+                    serialized = RegisterSupplierSerializer(user)
+                    return Response(serialized.data, status=status.HTTP_200_OK)
 
         except Supplier.DoesNotExist:
             ipdb.set_trace()

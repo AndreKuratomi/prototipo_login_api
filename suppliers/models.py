@@ -53,6 +53,7 @@ class Supplier(AbstractUser):
     
     is_admin = models.BooleanField(default=False)
     is_super_user = models.BooleanField(default=False)
+    asked_change_password = models.BooleanField(default=False)
         
     username = models.CharField(max_length=255, null=True, unique=False)
     username_created_at = models.DateTimeField(default=datetime.now())

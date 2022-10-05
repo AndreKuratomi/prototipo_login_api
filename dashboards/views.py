@@ -118,7 +118,7 @@ class LastVisitedDashboardView(APIView):
 
         try:
             update = Dashboard.objects.get(id=dashboard_id)
-            update.last_clicked = datetime.now() - timedelta(hours=3)
+            update.last_clicked = datetime.now()
             update.save(update_fields=['last_clicked'])
 
             last_list = super_user.last_visited_dashboards
@@ -130,14 +130,14 @@ class LastVisitedDashboardView(APIView):
 
             elif list_content.count() == 3:
                 last = str(list_content[0].last_clicked)[0:26]
-                date_now = datetime.now() - timedelta(hours=3)
+                date_now = datetime.now()
                 date_clicked = datetime.strptime(last, "%Y-%m-%d %H:%M:%S.%f")
 
                 final_result = date_now - date_clicked
 
 
                 for value in list_content:
-                    date_now = datetime.now() - timedelta(hours=3)
+                    date_now = datetime.now()
                     date_clicked = datetime.strptime(str(value.last_clicked)[0:26], "%Y-%m-%d %H:%M:%S.%f")
 
                     result_1 = date_now - date_clicked
