@@ -225,6 +225,19 @@ class AskChangePasswordMailView(APIView):
         return Response({"message": "Email successfully sent"}, status=status.HTTP_200_OK)
 
 
+class EmailForAskChangePasswordView(APIView):
+    def get(self, request, user_email=''):
+        try:
+            user = Supplier.objects.get(email=user_email)
+            if user:
+                serialized = RegisterSupplierSerializer(user)
+                return Response(serialized.data, status=status.HTTP_200_OK)
+
+        except Supplier.DoesNotExist:
+            ipdb.set_trace()
+            return Response({"message": "Usuário não encontrado! Verificar email."}, status=status.HTTP_404_NOT_FOUND)
+
+
 class ChangePasswordMailView(APIView):
     def post(self, request):
         serializer = ChangePasswordSerializer(data=request.data)
