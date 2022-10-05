@@ -103,9 +103,6 @@ class LoginSupplierView(APIView):
             date_logged = datetime.now()
             log_adm_view = datetime.strftime(date_logged, "%d-%m-%Y às %H:%M:%S")
 
-            user.login_dates.create(date_logged=log_adm_view)
-
-            user.save()
 
             #VERIFICAÇÃO SE USUÁRIO É SUPER_USER:
             if user.is_super_user is True or user.is_admin is True:
@@ -128,12 +125,16 @@ class LoginSupplierView(APIView):
 
             if result.days >= 0:
                 if result.days > 15:
+                    user.login_dates.create(date_logged=log_adm_view)
+                    user.save()
                     return Response({'token': token.key,
                                     'signature_vality': signature_in_miliseconds, 
                                     'cnpj': user.cnpj,
                                     })
 
                 elif result.days <= 15:
+                    user.login_dates.create(date_logged=log_adm_view)
+                    user.save()
                     return Response({"message": "Assinatura perto de vencer! Contatar suporte.", 
                                      'token': token.key, 
                                      'signature_vality': signature_in_miliseconds, 
@@ -171,8 +172,8 @@ class AskChangePasswordMailView(APIView):
         object.save()
 
         # LINKS:
-        link_change_password = "http://localhost:3000/changepassword"
         # link_change_password = "http://dev-bi.vestsys.com.br.s3-website-us-east-1.amazonaws.com/changepassword"
+        link_change_password = "http://localhost:3000/changepassword"
 
         supplier_email_message = """\
             <html>
@@ -251,8 +252,8 @@ class ChangePasswordMailView(APIView):
         object2.save()
 
         # LINKS:
-        link_login = "http://localhost:3000/"
         # link_login = "http://dev-bi.vestsys.com.br.s3-website-us-east-1.amazonaws.com/"
+        link_login = "http://localhost:3000/"
 
         supplier_email_message = """\
             <html>
