@@ -124,11 +124,11 @@ class LastVisitedDashboardView(APIView):
             last_list = super_user.last_visited_dashboards
             list_content = last_list.all()
 
-            if list_content.count() < 3:
+            if list_content.count() < 2:
                 last_list.add(update)
                 super_user.save()
 
-            elif list_content.count() == 3:
+            elif list_content.count() == 2:
                 last = str(list_content[0].last_clicked)[0:26]
                 date_now = datetime.now()
                 date_clicked = datetime.strptime(last, "%Y-%m-%d %H:%M:%S.%f")
