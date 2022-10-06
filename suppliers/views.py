@@ -14,6 +14,7 @@ from suppliers.serializers import RegisterSupplierSerializer, LoginSupplierSeria
 from .models import Supplier, LoggedSupplier
 
 from datetime import datetime, timedelta
+
 import uuid
 import ipdb
 
@@ -99,12 +100,9 @@ class LoginSupplierView(APIView):
             token = Token.objects.get_or_create(user=user)[0]
 
             # DATA E HORA LOGADAS:
-            date_logged = datetime.now() - timedelta(hours=3)
+            date_logged = datetime.now()
             log_adm_view = datetime.strftime(date_logged, "%d-%m-%Y às %H:%M:%S")
 
-            user.login_dates.create(date_logged=log_adm_view)
-
-            user.save()
 
             #VERIFICAÇÃO SE USUÁRIO É SUPER_USER:
             if user.is_super_user is True or user.is_admin is True:
@@ -118,20 +116,25 @@ class LoginSupplierView(APIView):
             signature_vality = user.signature_vality
             date_signed = datetime.strptime(signature_vality, "%Y-%m-%dT%H:%M:%S.%fZ")
 
-            date_now = datetime.now() - timedelta(hours=3)
+            date_now = datetime.now()
 
             result = date_signed - date_now
 
             signature_in_miliseconds = date_signed.timestamp()
+            # ipdb.set_trace()
 
             if result.days >= 0:
                 if result.days > 15:
+                    user.login_dates.create(date_logged=log_adm_view)
+                    user.save()
                     return Response({'token': token.key,
                                     'signature_vality': signature_in_miliseconds, 
                                     'cnpj': user.cnpj,
                                     })
 
                 elif result.days <= 15:
+                    user.login_dates.create(date_logged=log_adm_view)
+                    user.save()
                     return Response({"message": "Assinatura perto de vencer! Contatar suporte.", 
                                      'token': token.key, 
                                      'signature_vality': signature_in_miliseconds, 
@@ -156,9 +159,10 @@ class AskChangePasswordMailView(APIView):
         reducedUUID = str(uuid.uuid4())[0:8] # E COMO GARANTIR QUE ELA TERÁ UM PRAZO?
 
         # FORMATAÇÃO DE DATA:
-        dia = (timezone.now() - timedelta(hours=3)).strftime("%d/%m/%Y")
-        horas = (timezone.now() - timedelta(hours=3)).strftime("%H:%M:%S")
-
+        dia = (datetime.now()).strftime("%d/%m/%Y")
+        horas = (datetime.now()).strftime("%H:%M:%S")
+        print(dia)
+        print(horas)
         # PARA OBTER USERNAME PELO EMAIL:
         object = Supplier.objects.get(email=request.data['email'])
 
@@ -168,7 +172,8 @@ class AskChangePasswordMailView(APIView):
         object.save()
 
         # LINKS:
-        link_change_password = "http://dev-bi.vestsys.com.br.s3-website-us-east-1.amazonaws.com/changepassword"
+        # link_change_password = "http://dev-bi.vestsys.com.br.s3-website-us-east-1.amazonaws.com/changepassword"
+        link_change_password = "http://localhost:3000/changepassword"
 
         supplier_email_message = """\
             <html>
@@ -220,6 +225,29 @@ class AskChangePasswordMailView(APIView):
         return Response({"message": "Email successfully sent"}, status=status.HTTP_200_OK)
 
 
+class EmailForAskChangePasswordView(APIView):
+    def patch(self, request, user_email=''):
+        try:
+            user = Supplier.objects.get(email=user_email)
+            if user:
+                if user.asked_change_password == False:
+                    user.asked_change_password = True
+                    user.save(update_fields=['asked_change_password'])
+                    serialized = RegisterSupplierSerializer(user)
+                    return Response(serialized.data, status=status.HTTP_200_OK)
+
+                else:
+                    user.asked_change_password = False
+                    user.save(update_fields=['asked_change_password'])
+                    
+                    serialized = RegisterSupplierSerializer(user)
+                    return Response(serialized.data, status=status.HTTP_200_OK)
+
+        except Supplier.DoesNotExist:
+            ipdb.set_trace()
+            return Response({"message": "Usuário não encontrado! Verificar email."}, status=status.HTTP_404_NOT_FOUND)
+
+
 class ChangePasswordMailView(APIView):
     def post(self, request):
         serializer = ChangePasswordSerializer(data=request.data)
@@ -227,8 +255,8 @@ class ChangePasswordMailView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         # FORMATAÇÃO DE DATA:
-        dia = (timezone.now() - timedelta(hours=3)).strftime("%d/%m/%Y")
-        horas = (timezone.now() - timedelta(hours=3)).strftime("%H:%M:%S")
+        dia = (datetime.now()).strftime("%d/%m/%Y")
+        horas = (datetime.now()).strftime("%H:%M:%S")
 
         # PARA OBTER USERNAME PELA SENHA PROVISÓRIA:
         # ipdb.set_trace()
@@ -247,7 +275,8 @@ class ChangePasswordMailView(APIView):
         object2.save()
 
         # LINKS:
-        link_login = "http://dev-bi.vestsys.com.br.s3-website-us-east-1.amazonaws.com/"
+        # link_login = "http://dev-bi.vestsys.com.br.s3-website-us-east-1.amazonaws.com/"
+        link_login = "http://localhost:3000/"
 
         supplier_email_message = """\
             <html>

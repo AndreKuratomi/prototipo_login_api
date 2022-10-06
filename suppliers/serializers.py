@@ -30,6 +30,7 @@ class RegisterSupplierSerializer(serializers.Serializer):
     
     is_admin = serializers.BooleanField()
     is_super_user = serializers.BooleanField()
+    asked_change_password = serializers.BooleanField()
     
     username = serializers.CharField()
     username_created_at = serializers.DateTimeField(read_only=True)
