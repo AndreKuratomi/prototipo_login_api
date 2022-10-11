@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from .models import Dashboard
 from .serializers import DashboardSerializer
@@ -21,8 +21,6 @@ class RegisterDashboardView(APIView):
         find_dashboard_url = Dashboard.objects.filter(url=serializer.validated_data['url']).exists()
         if find_dashboard_url is True:
             return Response({"message": "Dashboard já registrada!"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-
-        # dashboard = Dashboard.objects.create(**serializer.validated_data)
 
         user = Supplier.objects.filter(cnpj = serializer.validated_data['supplier_owner'])
         if user.exists() is False:
@@ -46,7 +44,6 @@ class DashboardByIdView(APIView):
     def get(self, request, dashboard_id=''):
         try:
             dashboard = Dashboard.objects.get(id=dashboard_id)
-            # PESQUISAR prefetch_related() PARA POSSIBILIDADE DE MAIS DE UMA URL!
             serialized = DashboardSerializer(dashboard)
 
             return Response(serialized.data, status=status.HTTP_200_OK)
@@ -79,7 +76,6 @@ class DashboardByIdView(APIView):
             dashboard = Dashboard.objects.get(id=dashboard_id)
 
             dashboard.delete()
-            # Dashboard.remove()??
 
             return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -93,7 +89,7 @@ class DashboardByCategoryView(APIView):
             adjusted_query = dashboard_category.strip().lower()
 
             dashboard = Dashboard.objects.filter(category=adjusted_query)
-            # ipdb.set_trace()
+
             if dashboard.count() > 0:
                 serialized = DashboardSerializer(dashboard, many=True)
 
@@ -141,19 +137,16 @@ class LastVisitedDashboardView(APIView):
                     date_clicked = datetime.strptime(str(value.last_clicked)[0:26], "%Y-%m-%d %H:%M:%S.%f")
 
                     result_1 = date_now - date_clicked
-                    print(result_1)
 
                     if result_1 > final_result:
                         last = value
-                        print(last)
 
                 last_list.remove(last)
                 last_list.add(update)
 
                 super_user.save()
 
-            last_list.order_by('last_clicked').reverse()
-            # ipdb.set_trace()
+            # last_list.order_by('last_clicked').reverse()
             # super_user.save()
 
 
@@ -170,10 +163,6 @@ class DashboardEditFavoriteView(APIView):
         super_user = Supplier.objects.filter(is_super_user=True)
         if super_user is False:
             return Response({"message": "Fornecedor não encontrado! Verificar dados."}, status=status.HTTP_404_NOT_FOUND)
-
-        # serializer = DashboardSerializer(data=request.data, partial=True)
-        # if not serializer.is_valid():
-        #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             dashboard = Dashboard.objects.get(id=dashboard_id)

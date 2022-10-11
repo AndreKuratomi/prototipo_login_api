@@ -93,20 +93,15 @@ WSGI_APPLICATION = 'prototipo_login_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# ipdb.set_trace()
+
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('POSTGRES_DB'),
         'USER': os.getenv('POSTGRES_USER'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
         'HOST': os.getenv('POSTGRES_HOST'),
         'PORT': '5432'
-        # 'HOST': 'localhost',
-        # 'PASSWORD': '12345678',
     }
 }
 
@@ -157,31 +152,16 @@ AUTH_USER_MODEL = 'suppliers.Supplier'
 
 # CORS
 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:3000",
-#     "http://127.0.0.1:8000",
-#     "http://dev-bi.vestsys.com.br.s3-website-us-east-1.amazonaws.com"
-# ]
-
 CORS_ORIGIN_ALLOW_ALL = True
-
-# CORS_ALLOW_METHODS = [
-#     "DELETE",
-#     "GET",
-#     "PATCH"
-#     "POST",
-#     "PUT",
-# ]
 
 
 # Emails
 
-ADMINS = [('Suporte', 'suporte.vestcasa@gmail.com')]
+ADMINS = [('Suporte', 'andrekuratomi@gmail.com')]
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'suporte.troca.senha.teste@gmail.com'
-# EMAIL_HOST_PASSWORD = '1234zxcv!@'
-EMAIL_HOST_PASSWORD = 'vkhjjyktopjgwgzj'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
@@ -189,13 +169,13 @@ EMAIL_USE_SSL = False
 
 # # AWS
 
-AWS_ACCESS_KEY_ID = 'AKIAZ6XI6YUXXP46KH6U'
+# AWS_ACCESS_KEY_ID = 'AKIAZ6XI6YUXXP46KH6U'
 # AWS_DEFAULT_ACL = None
-AWS_SECRET_ACCESS_KEY = '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'
+# AWS_SECRET_ACCESS_KEY = 'm4Q2fcxstDEIzIlUuLvu5gf4Sehbb0iA7r6l3RE1'
 # AWS_STORAGE_BUCKET_NAME = 'devbi.api.vestsys.com.br'
 # AWS_S3_CUSTOM_DOMAIN = '%s.s3-website-us-east-1.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 # AWS_S3_FILE_OVERWRITE = False
 # AWS_S3_SIGNATURE_VERSION = 'AWS4-HMAC-SHA256'
 # AWS_S3_VERIFY = True
 # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

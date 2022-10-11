@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 
 class DashboardSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True) #PK!
+    id = serializers.IntegerField(read_only=True)
     category = serializers.CharField()
     is_favorite = serializers.BooleanField(default=False)
     name = serializers.CharField()
@@ -12,4 +12,3 @@ class DashboardSerializer(serializers.Serializer):
     last_clicked = serializers.DateTimeField(read_only=True)
     
     supplier_owner = serializers.CharField()
-    
