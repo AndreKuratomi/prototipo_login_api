@@ -67,12 +67,33 @@ E rodar a aplicação:
 ```
 code .
 ```
+<br>
+
+<h5>2. Feitas as instalações precisamos criar nosso arquivo de variáveis de ambiente, o <span style="text-decoration: underline">.env</span>:</h5>
+
+```
+touch .env
+```
+
+Dentro dele precisamos definir nossas variáveis de ambiente:
+
+```
+EMAIL_HOST_USER=user_mail
+EMAIL_HOST_PASSWORD=password
+
+POSTGRES_DB=database
+POSTGRES_HOST=host
+POSTGRES_PASSWORD=password
+POSTGRES_USER=user
+```
+
+<b>Obs:</b> as informações contidas no arquivo <b>.env</b> não devem ser compartilhadas. O arquivo já consta no <b>.gitignore</b> para não ser subido no repositório.
 
 # Documentação
 
 Para ter acesso às descrições, detalhes das rotas e seus retornos, conferir documentação completa no link a seguir:
 
-(Link)
+https://insomnia-documentation-mauve.vercel.app/
 
 # Termos de uso
 
@@ -88,5 +109,7 @@ Esse projeto atende a fins exclusivamente didáticos e sem nenhum intuito comerc
 - [Django Rest framework](https://www.django-rest-framework.org/#)
 - [Docker](https://docs.docker.com/)
 - [Dotenv](https://www.npmjs.com/package/dotenv)
+- [Insomnia-documenter](https://www.npmjs.com/package/insomnia-documenter)
+- [Insomnia-documenter (quick tutorial)](https://www.youtube.com/watch?v=pq2u3FqVVy8)
 - [JWT](https://github.com/auth0/node-jsonwebtoken)
 
