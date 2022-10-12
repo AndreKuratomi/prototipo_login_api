@@ -81,7 +81,7 @@ Esse projeto atende a fins exclusivamente didáticos e sem nenhum intuito comerc
 # Referências
 
 - [AWS EC2](https://docs.aws.amazon.com/ec2/index.html)
-- [AWS EC2 (Docker)]([https://www.npmjs.com/package/dotenv](https://stackoverflow.com/questions/53974488/how-to-delete-and-recreate-a-postgres-database-using-a-single-docker-command))
+- [AWS EC2 (Docker)](https://stackoverflow.com/questions/53974488/how-to-delete-and-recreate-a-postgres-database-using-a-single-docker-command)
 - [Bcrypt](https://github.com/kelektiv/node.bcrypt.js)
 - [Django](https://www.djangoproject.com/)
 - [DjangoMail](https://docs.djangoproject.com/en/4.1/topics/email/)
