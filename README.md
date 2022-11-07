@@ -15,11 +15,12 @@
 
 
 Link AWS:
+
 http://dev-bi-abkura.com.br.s3-website-us-east-1.amazonaws.com/
 
-Repositório API:
+Repositório frontend:
 
-https://github.com/AndreKuratomi/PrototipoLogin-API
+https://github.com/AndreKuratomi/PrototipoLogin
 
 # Instalação
 
