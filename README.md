@@ -10,7 +10,7 @@
 
 # Sobre
 
-<b>PrototipoLogin-API</b> é uma aplicação de login de fornecedores a seus relatórios Power-BI. Esta aplicação utiliza o framework Django.
+<b>prototipo_login_api</b> é uma aplicação de login de fornecedores a seus relatórios Power-BI. Esta aplicação utiliza o framework Django.
 <br>
 
 
@@ -20,7 +20,7 @@ http://dev-bi-abkura.com.br.s3-website-us-east-1.amazonaws.com/
 
 Repositório frontend:
 
-https://github.com/AndreKuratomi/PrototipoLogin
+https://github.com/AndreKuratomi/prototipo_login_api
 
 # Instalação
 
@@ -42,13 +42,13 @@ git init
 <h5>1. Fazer o clone do reposítório <span>PrototipoLogin-API</span> na sua máquina pelo terminal do computador ou pelo do IDE:</h5>
 
 ```
-git clone https://github.com/AndreKuratomi/PrototipoLogin-API.git
+git clone https://github.com/AndreKuratomi/prototipo_login_api.git
 ```
 
 <p>Entrar na pasta criada:</p>
 
 ```
-cd PrototipoLogin-API
+cd prototipo_login_api
 ```
 
 Após feito o clone do repositório PrototipoLogin-API, instalar:
