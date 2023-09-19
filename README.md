@@ -14,7 +14,7 @@
 
 Os usuários também podem trocar de senha caso desejem. Para mais informações conferir no repositório [front](https://github.com/AndreKuratomi/PrototipoLogin).
 
-Esta aplicação utiliza o framework <b>Django</b> e a lib <strong>DjangoMail</strong>.
+Esta aplicação utiliza o framework <b>Django</b>, a lib <strong>DjangoMail</strong> o software <b>Docker</b> e a serviço AWS <strong>EC2</strong>.
 <br>
 
 
