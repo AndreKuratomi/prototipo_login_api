@@ -1,4 +1,4 @@
-## PROTOTIPO-LOGIN-API
+## prototipo_login_api
 
 - [Sobre](#sobre)
 - [Instalação](#instalação)
@@ -10,7 +10,7 @@
 
 # Sobre
 
-<b>prototipo_login_api</b> é uma aplicação de login de fornecedores a seus relatórios Power-BI. Esta aplicação utiliza o framework Django.
+<b>prototipo_login_api</b> é uma API para login de fornecedores a seus relatórios Power-BI filtrando por período de assinatura. Esta aplicação utiliza o framework Django.
 <br>
 
 
