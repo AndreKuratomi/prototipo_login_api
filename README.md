@@ -10,7 +10,11 @@
 
 # Sobre
 
-<b>prototipo_login_api</b> é uma API para login de fornecedores a seus relatórios Power-BI filtrando por período de assinatura. Esta aplicação utiliza o framework Django.
+<b>prototipo_login_api</b> é uma API para login de fornecedores a seus relatórios Power-BI filtrando por período de assinatura. O superusuario consegue visualizar todos eles em seu dashboard.
+
+Os usuários também podem trocar de senha caso desejem. Para mais informações conferir no repositório [front](https://github.com/AndreKuratomi/PrototipoLogin).
+
+Esta aplicação utiliza o framework <b>Django</b> e a lib <strong>DjangoMail</strong>.
 <br>
 
 
