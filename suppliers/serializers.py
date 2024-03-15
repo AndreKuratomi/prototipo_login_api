@@ -22,7 +22,6 @@ class RegisterSupplierSerializer(serializers.Serializer):
     last_name = serializers.CharField()
 
     password = serializers.CharField(write_only=True)
-    # password_provisional = serializers.CharField() # COMO FAZER PARA TER DURAÇÃO DEFINIDA??
     
     franquia = serializers.CharField(required=False)
     signature_created_at = serializers.DateTimeField(read_only=True)
@@ -30,6 +29,7 @@ class RegisterSupplierSerializer(serializers.Serializer):
     
     is_admin = serializers.BooleanField()
     is_super_user = serializers.BooleanField()
+    asked_change_password = serializers.BooleanField()
     
     username = serializers.CharField()
     username_created_at = serializers.DateTimeField(read_only=True)
@@ -51,7 +51,6 @@ class AskChangePasswordSerializer(serializers.Serializer):
 
 
 class ChangePasswordSerializer(serializers.Serializer):
-    password_provisional = serializers.CharField() # COMO FAZER PARA TER DURAÇÃO DEFINIDA??
+    password_provisional = serializers.CharField()
     new_password = serializers.CharField()
     repeat_new_password = serializers.CharField()
-

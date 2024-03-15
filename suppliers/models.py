@@ -3,17 +3,11 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 from django.utils import timezone
 
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import uuid
 import ipdb
 
-print(timezone.now())
-print(datetime.now())
-
-accurate_time = datetime.now() - timedelta(hours=3)
-
-log_adm_view = datetime.strftime(accurate_time, "%d-%m-%Y às %H:%M:%S")
 
 class CustomUserManager(BaseUserManager):
     def _create_user(self, email, password, is_staff, is_superuser, **extra_fields):
@@ -39,13 +33,13 @@ class CustomUserManager(BaseUserManager):
 
 
 class Supplier(AbstractUser):
-    cnpj = models.CharField(editable=False, max_length=255, primary_key=True) #READ-ONLY. Talvez dê problema
+    cnpj = models.CharField(editable=False, max_length=255, primary_key=True)
     email = models.EmailField(editable=True, max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
 
     password = models.CharField(editable=True, max_length=255, unique=False)
-    password_provisional = models.CharField(default=uuid.uuid4, max_length=255, blank=True) # como fazer para ter duração definida??
+    password_provisional = models.CharField(default=uuid.uuid4, max_length=255, blank=True) # FUTURAMENTE DEFINIR VALIDADE POR 24H.
 
     franquia = models.CharField(max_length=255, blank=True)
     signature_created_at = models.DateTimeField(default=datetime.now(), max_length=255, null=False)
@@ -53,6 +47,7 @@ class Supplier(AbstractUser):
     
     is_admin = models.BooleanField(default=False)
     is_super_user = models.BooleanField(default=False)
+    asked_change_password = models.BooleanField(default=False)
         
     username = models.CharField(max_length=255, null=True, unique=False)
     username_created_at = models.DateTimeField(default=datetime.now())
@@ -60,7 +55,6 @@ class Supplier(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['cnpj', 'first_name', 'last_name', 'password', 'is_super_user', 'is_admin', 'username']
-    # 'signature_status', 'signature_vality', 
 
     objects = CustomUserManager()
 

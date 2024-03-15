@@ -1,7 +1,5 @@
 from django.contrib.auth import authenticate
 from django.core.mail import EmailMessage, mail_admins, send_mail
-from django.template import loader
-from django.utils import timezone
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -11,9 +9,9 @@ from rest_framework.authentication import TokenAuthentication
 
 from suppliers.serializers import RegisterSupplierSerializer, LoginSupplierSerializer, LoggedSupplierSerializer, AskChangePasswordSerializer, ChangePasswordSerializer
 
-from .models import Supplier, LoggedSupplier
+from .models import Supplier
 
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import uuid
 import ipdb
@@ -29,9 +27,7 @@ class RegisterSupplierView(APIView):
         find_supplier = Supplier.objects.filter(cnpj=serializer.validated_data['cnpj']).exists()
         if find_supplier is True:
             return Response({"message": "Fornecedor já registrado!"}, status.HTTP_422_UNPROCESSABLE_ENTITY)
-        
-        
-        # ipdb.set_trace()
+
         supplier = Supplier.objects.create_user(**serializer.validated_data)
         serializer = RegisterSupplierSerializer(supplier)
 
@@ -42,7 +38,6 @@ class RegisterSupplierView(APIView):
         serializer = RegisterSupplierSerializer(all_suppliers, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
-        # PARA OS ADMINS FUTURAMENTE ACESSAREM AS INF VIA API.
 
 
 class SupplierByCNPJView(APIView):
@@ -54,7 +49,7 @@ class SupplierByCNPJView(APIView):
                 serialized = RegisterSupplierSerializer(supplier)
 
                 return Response(serialized.data, status=status.HTTP_200_OK)
-        # MELHORAR
+
         except Supplier.DoesNotExist:
             return Response({"message": "Fornecedor não registrado!"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -79,7 +74,6 @@ class SupplierByCNPJView(APIView):
             supplier = Supplier.objects.get(cnpj=supplier_cnpj)
 
             supplier.delete()
-            # Dashboard.remove()??
 
             return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -103,7 +97,6 @@ class LoginSupplierView(APIView):
             date_logged = datetime.now()
             log_adm_view = datetime.strftime(date_logged, "%d-%m-%Y às %H:%M:%S")
 
-
             #VERIFICAÇÃO SE USUÁRIO É SUPER_USER:
             if user.is_super_user is True or user.is_admin is True:
                 return Response({'token': token.key,
@@ -121,7 +114,6 @@ class LoginSupplierView(APIView):
             result = date_signed - date_now
 
             signature_in_miliseconds = date_signed.timestamp()
-            # ipdb.set_trace()
 
             if result.days >= 0:
                 if result.days > 15:
@@ -161,8 +153,7 @@ class AskChangePasswordMailView(APIView):
         # FORMATAÇÃO DE DATA:
         dia = (datetime.now()).strftime("%d/%m/%Y")
         horas = (datetime.now()).strftime("%H:%M:%S")
-        print(dia)
-        print(horas)
+
         # PARA OBTER USERNAME PELO EMAIL:
         object = Supplier.objects.get(email=request.data['email'])
 
@@ -172,8 +163,8 @@ class AskChangePasswordMailView(APIView):
         object.save()
 
         # LINKS:
-        # link_change_password = "http://dev-bi.vestsys.com.br.s3-website-us-east-1.amazonaws.com/changepassword"
-        link_change_password = "http://localhost:3000/changepassword"
+        link_change_password = "http://dev-bi-abkura.s3-website-us-east-1.amazonaws.com/changepassword"
+        # link_change_password = "http://localhost:3000/changepassword"
 
         supplier_email_message = """\
             <html>
@@ -187,7 +178,7 @@ class AskChangePasswordMailView(APIView):
                     <br>
                     <p>Por favor, não responda este e-mail. Ele é enviado de forma automática.<p>
                     <p>Atenciosamente,</p>
-                    <h3>Vestcasa</h3>
+                    <h3>EMPRESA</h3>
                 </body>
             </html>
         """ % (object.username, reducedUUID, link_change_password)
@@ -202,13 +193,13 @@ class AskChangePasswordMailView(APIView):
                     <p>Senha provisória de %s: %s </p>
                     <br>
                     
-                    <h3>Vestcasa</h3>
+                    <h3>EMPRESA</h3>
                 </body>
             </html>
         """ % (object.username, horas, dia, object.username, reducedUUID)
 
         send_mail(
-            "Pedido troca de senha usuário(a) {a1} - Suporte VestCasa".format(a1=object.username),
+            "Pedido troca de senha usuário(a) {a1} - Suporte EMPRESA".format(a1=object.username),
             "",
             "suporte.troca.senha.teste@gmail.com", 
             [request.data['email']], 
@@ -226,15 +217,24 @@ class AskChangePasswordMailView(APIView):
 
 
 class EmailForAskChangePasswordView(APIView):
-    def get(self, request, user_email=''):
+    def patch(self, request, user_email=''):
         try:
             user = Supplier.objects.get(email=user_email)
             if user:
-                serialized = RegisterSupplierSerializer(user)
-                return Response(serialized.data, status=status.HTTP_200_OK)
+                if user.asked_change_password == False:
+                    user.asked_change_password = True
+                    user.save(update_fields=['asked_change_password'])
+                    serialized = RegisterSupplierSerializer(user)
+                    return Response(serialized.data, status=status.HTTP_200_OK)
+
+                else:
+                    user.asked_change_password = False
+                    user.save(update_fields=['asked_change_password'])
+                    
+                    serialized = RegisterSupplierSerializer(user)
+                    return Response(serialized.data, status=status.HTTP_200_OK)
 
         except Supplier.DoesNotExist:
-            ipdb.set_trace()
             return Response({"message": "Usuário não encontrado! Verificar email."}, status=status.HTTP_404_NOT_FOUND)
 
 
@@ -249,12 +249,7 @@ class ChangePasswordMailView(APIView):
         horas = (datetime.now()).strftime("%H:%M:%S")
 
         # PARA OBTER USERNAME PELA SENHA PROVISÓRIA:
-        # ipdb.set_trace()
         object2 = Supplier.objects.get(password_provisional=request.data['password_provisional'])
-        # except DoesNotExist:
-        # VER COMO RETORNAR ESTE ERRO (ESTRUTURA TRY/EXCEPT):
-        # if suppliers.models.Supplier.DoesNotExist:
-        #     return Response({"message": "Password provisional not found. Verify email sent."}, status=status.HTTP_404_BAD_REQUEST)
 
         # DEFINIÇÃO NOVA SENHA:
         object2.set_password(request.data['new_password'])
@@ -265,8 +260,8 @@ class ChangePasswordMailView(APIView):
         object2.save()
 
         # LINKS:
-        # link_login = "http://dev-bi.vestsys.com.br.s3-website-us-east-1.amazonaws.com/"
-        link_login = "http://localhost:3000/"
+        link_login = "http://dev-bi-abkura.s3-website-us-east-1.amazonaws.com/"
+        # link_login = "http://localhost:3000/"
 
         supplier_email_message = """\
             <html>
@@ -279,7 +274,7 @@ class ChangePasswordMailView(APIView):
                     <br>
                     <p>Por favor, não responda este e-mail. Ele é enviado de forma automática.<p>
                     <p>Atenciosamente,</p>
-                    <h3>Vestcasa</h3>
+                    <h3>EMPRESA</h3>
                 </body>
             </html>
         """ % (object2.username, link_login)
@@ -293,13 +288,13 @@ class ChangePasswordMailView(APIView):
                     <p>Nova senha de %s: %s </p>
                     <br>
                     
-                    <h3>Vestcasa</h3>
+                    <h3>EMPRESA</h3>
                 </body>
             </html>
         """ % (object2.username, horas, dia, object2.username, request.data['new_password'])
 
         send_mail(
-            "Confirmação troca de senha usuário(a) {a1} - Suporte VestCasa".format(a1=object2.username),
+            "Confirmação troca de senha usuário(a) {a1} - Suporte EMPRESA".format(a1=object2.username),
             "",
             "suporte.troca.senha.teste@gmail.com", 
             [object2.email], 
