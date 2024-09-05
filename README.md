@@ -1,96 +1,184 @@
-## prototipo_login_api
+# prototipo_login_api
 
-- [Sobre](#sobre)
-- [Instalação](#instalação)
-- [Documentação](#documentação)
-- [Termos de uso](#termos-de-uso)
-- [Referências](#referências)
+- [Translations](#translations)
+- [About](#about)
+- [Links](#links)
+- [Instalation](#instalation)
+- [Documentation](#documentation)
+- [References](#references)
 
 <br>
 
-# Sobre
+## Translations
 
-<b>prototipo_login_api</b> é uma API para login de fornecedores a seus relatórios Power-BI filtrando por período de assinatura. O superusuario consegue visualizar todos eles em seu dashboard.
+- [Português brasileiro](./.multilingual_readmes/README_pt-br.md)
+- [English / Inglês](https://github.com/AndreKuratomi/PrototipoLogin/)
 
-Os usuários também podem trocar de senha caso desejem. Para mais informações conferir no repositório [front](https://github.com/AndreKuratomi/PrototipoLogin).
-
-Esta aplicação utiliza o framework <b>Django</b>, a lib <strong>DjangoMail</strong>, o software <b>Docker</b> e o serviço AWS <strong>EC2</strong>.
 <br>
 
+## About
 
-Link AWS:
+<b>prototipo_login_api</b> is the <b>PrototipoLogin</b>'s API.
 
-http://dev-bi-abkura.com.br.s3-website-us-east-1.amazonaws.com/
+This API uses the language <strong>[Python](https://www.python.org/downloads/)</strong>, its framework <strong>[Django](https://www.djangoproject.com/)</strong>, its lib <strong>[DjangoMail](https://docs.djangoproject.com/en/4.1/topics/email/)</strong>, the database <strong>[PostgreSQL](https://www.postgresql.org/)</strong>, the software <strong>[Docker](https://docs.docker.com/)</strong> and the <strong>[AWS EC2](https://docs.aws.amazon.com/ec2/index.html)</strong> service.
 
-Repositório frontend:
+<br>
 
-https://github.com/AndreKuratomi/PrototipoLogin
+## Links
 
-# Instalação
+AWS S3 [link](http://dev-bi-abkura.com.br.s3-website-us-east-1.amazonaws.com/)
 
-<h5>0. Primeiramente, é necessário já ter instalado na própria máquina:</h5>
+PrototipoLogin's frontend [repository](https://github.com/AndreKuratomi/prototipo_login_api)
 
-- Um <b>editor de código</b>, conhecido também como <b>IDE</b>. Por exemplo, o <b>[Visual Studio Code (VSCode)](https://code.visualstudio.com/)</b>.
+<br>
 
-- Uma <b>ferramenta cliente de API REST</b>. Por exemplo, o <b>[Insomnia](https://insomnia.rest/download)</b> ou o <b>[Postman](https://www.postman.com/product/rest-client/)</b>.
+## Instalation:
 
-- <b>Python</b> e pacotes essenciais como <b>[asdf](https://asdf-vm.com/guide/getting-started.html)</b> e <b>[asdf-python](https://github.com/danhper/asdf-python)</b>.
+<h3>0. It is first necessary to have instaled the following devices:</h3>
 
-- <p> E versionar o diretório para receber o clone da aplicação:</p>
+- The code versioning <b>[Git](https://git-scm.com/downloads)</b>,
+
+- The programming language <b>[Python](https://www.python.org/downloads/)</b>,
+
+- The software <b>[Docker](https://docs.docker.com/)</b>,
+
+- The <b>[PostgreSQL](https://www.postgresql.org/)
+</b> database,
+
+- A <b>code editor</b>, also known as <b>IDE</b>. For instance, <strong>[Visual Studio Code (VSCode)](https://code.visualstudio.com/)</strong>,
+
+- <p> And versioning your directory to receive the aplication clone:</p>
 
 ```
 git init
 ```
 
 <br>
-<h5>1. Fazer o clone do reposítório <span>PrototipoLogin-API</span> na sua máquina pelo terminal do computador ou pelo do IDE:</h5>
+<h3>1. Clone the repository <b>prototipo_login_api</b> by your machine terminal or by the IDE:</h3>
 
 ```
 git clone https://github.com/AndreKuratomi/prototipo_login_api.git
 ```
 
-<p>Entrar na pasta criada:</p>
+WINDOWS:
+
+Obs: In case of any mistake similar to this one: 
+
+```
+unable to access 'https://github.com/AndreKuratomi/prototipo_login_api.git': SSL certificate problem: self-signed certificate in certificate chain
+```
+
+Configure git to disable SSL certification:
+
+```
+git config --global http.sslVerify "false"
+```
+
+<p>Enter the directory:</p>
 
 ```
 cd prototipo_login_api
 ```
+<br>
 
-Após feito o clone do repositório PrototipoLogin-API, instalar:
+<h3>2. After cloning the repository install:</h3>
 
-O ambiente virtual e atualizar suas dependências com o seguinte comando:
+<h4>Virtual enviroment* and update its dependencies with the following command:</h4>
+
+
+LINUX:
+```
+python3 -m venv venv --upgrade-deps
+```
+
+WINDOWS:
+```
+py -m venv venv --upgrade-deps
+```
+
+In case an error like this one is returned just follow the command displayed:
 
 ```
-python -m venv venv --upgrade-deps
+The virtual environment was not created successfully because ensurepip is not
+available.  On Debian/Ubuntu systems, you need to install the python3-venv
+package using the following command.
+
+    apt install python3.10-venv
+
+You may need to use sudo with that command.  After installing the python3-venv
+package, recreate your virtual environment.
 ```
 
-Ative o seu ambiente virtual com o comando:
+*It is a good practice to work with virtual enviroments because different projects may need different dependencies. A virtual enviroment is only a separated enviroment from the user machine. If not used, the user's machine may have lots of dependencies intalled that may only be used in a single project.
 
+<br>
+
+<h4>Ativate your virtual enviroment with the command:</h4>
+
+LINUX:
 ```
 source/venv/bin/activate
 ```
 
-Instalar suas dependências:
+WINDOWS:
+
+On Windows operational system it is necessary to configure the Execution Policy at PowerShell:
+
+```
+Get-ExecutionPolicy # to check the Execution policy type
+Set-ExecutionPolicy RemoteSigned # to change the type of policy if the command above shows 'Restricted'
+```
+Obs: It may often be necessary to open PowerShell as administrador for that.
+
+```
+.\env\Scripts\activate
+```
+
+<br>
+
+<h4>Install its dependencies:</h4>
 
 ```
 pip install -r requirements.txt
 ```
+<br>
 
-E rodar a aplicação:
+WINDOWS:
+
+In case any error similar to the one bellow be returned:
+
+```
+ERROR: Could not install packages due to an OSError: [Errno 2] No such file or directory: 'C:\\Users\\andre.kuratomi\\OneDrive - Company\\Área de Trabalho\\tables_to_db_mail_for_finances\\tables_to_db_and_mail_finances\\env\\Lib\\site-packages\\jedi\\third_party\\django-stubs\\django-stubs\\contrib\\contenttypes\\management\\commands\\remove_stale_contenttypes.pyi'
+HINT: This error might have occurred since this system does not have Windows Long Path support enabled. You can find information on how to enable this at https://pip.pypa.io/warnings/enable-long-paths
+```
+
+Run cmd as adminstrador with the following command:
+
+```
+reg.exe add HKLM\SYSTEM\CurrentControlSet\Control\FileSystem /v LongPathsEnabled /t REG_DWORD /d 1 /f
+```
+
+<br>
+
+<h3>3. Open the application on your IDE:</h3>
 
 ```
 code .
 ```
 <br>
 
-<h5>2. Feitas as instalações precisamos criar nosso arquivo de variáveis de ambiente, o <span style="text-decoration: underline">.env</span>:</h5>
+
+<h3>4. Create <b>.env</b> file at the root directory:</h3>
 
 ```
 touch .env
 ```
 
-Dentro dele precisamos definir nossas variáveis de ambiente:
+Inside it we need to put our enviroment variables taking as reference the given file <b>.env.example</b>:
 
 ```
+DJANGO_SECRET_KEY=secret_key
+
 EMAIL_HOST_USER=user_mail
 EMAIL_HOST_PASSWORD=password
 
@@ -100,19 +188,34 @@ POSTGRES_PASSWORD=password
 POSTGRES_USER=user
 ```
 
-<b>Obs:</b> as informações contidas no arquivo <b>.env</b> não devem ser compartilhadas. O arquivo já consta no <b>.gitignore</b> para não ser subido no repositório.
+<b>Obs:</b> Do not share info from <b>.env</b> file. It is already mentioned in <b>.gitignore</b> for not being pushed to the repo.
 
-# Documentação
+<h3>5. And run Django:</h3>
 
-Para ter acesso às descrições, detalhes das rotas e seus retornos, conferir documentação completa no link a seguir:
+LINUX:
+```
+python manage.py runserver
+```
+or
+```
+./manage.py runserver
+```
 
-https://insomnia-documentation-mauve.vercel.app/
+WINDOWS:
+```
+py manage.py runserver
+```
 
-# Termos de uso
+<br>
 
-Esse projeto atende a fins exclusivamente didáticos e sem nenhum intuito comercial.
 
-# Referências
+## Documentation
+
+For full description of endpoints and its responses check the insomnia documentation on the link bellow (necessary free login account) click [here](https://insomnia-documentation-mauve.vercel.app/).
+
+<br>
+
+## References
 
 - [AWS EC2](https://docs.aws.amazon.com/ec2/index.html)
 - [AWS EC2 (Docker)](https://stackoverflow.com/questions/53974488/how-to-delete-and-recreate-a-postgres-database-using-a-single-docker-command)
@@ -125,4 +228,4 @@ Esse projeto atende a fins exclusivamente didáticos e sem nenhum intuito comerc
 - [Insomnia-documenter](https://www.npmjs.com/package/insomnia-documenter)
 - [Insomnia-documenter (quick tutorial)](https://www.youtube.com/watch?v=pq2u3FqVVy8)
 - [JWT](https://github.com/auth0/node-jsonwebtoken)
-
+- [PostgreSQL](https://www.postgresql.org/)
