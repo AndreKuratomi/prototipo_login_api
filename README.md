@@ -12,7 +12,7 @@
 ## Translations
 
 - [Português brasileiro](./.multilingual_readmes/README_pt-br.md)
-- [English / Inglês](https://github.com/AndreKuratomi/PrototipoLogin/)
+- [English / Inglês](https://github.com/AndreKuratomi/prototipo_login_api/)
 
 <br>
 
