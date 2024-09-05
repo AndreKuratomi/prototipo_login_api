@@ -2,9 +2,9 @@
 
 - [Traduções](#traduções)
 - [Sobre](#sobre)
+- [Links](#links)
 - [Instalação](#instalação)
 - [Documentação](#documentação)
-- [Termos de uso](#termos-de-uso)
 - [Referências](#referências)
 
 <br>
@@ -25,14 +25,11 @@ Os usuários também podem trocar de senha caso desejem. Para mais informações
 Esta aplicação utiliza o framework <b>Django</b>, a lib <strong>DjangoMail</strong>, o software <b>Docker</b> e o serviço AWS <strong>EC2</strong>.
 <br>
 
+## Links
 
-Link AWS:
+AWS S3 [link](http://dev-bi-abkura.com.br.s3-website-us-east-1.amazonaws.com/)
 
-http://dev-bi-abkura.com.br.s3-website-us-east-1.amazonaws.com/
-
-Repositório frontend:
-
-https://github.com/AndreKuratomi/PrototipoLogin
+Repositório [frontend](https://github.com/AndreKuratomi/prototipo_login_api)
 
 <br>
 
