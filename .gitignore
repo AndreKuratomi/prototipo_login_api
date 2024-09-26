@@ -7,3 +7,5 @@ venv/
 node_modules/
 
 .env
+
+issues.txt
