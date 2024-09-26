@@ -29,7 +29,7 @@ Esta aplicação utiliza o framework <b>Django</b>, a lib <strong>DjangoMail</st
 
 AWS S3 [link](http://dev-bi-abkura.com.br.s3-website-us-east-1.amazonaws.com/)
 
-Repositório [frontend](https://github.com/AndreKuratomi/prototipo_login_api)
+Repositório [frontend](https://github.com/AndreKuratomi/prototipo_login_api/tree/pt_br)
 
 <br>
 
