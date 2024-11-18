@@ -11,8 +11,8 @@
 
 ## Traduções
 
-- [English / Inglês](https://github.com/AndreKuratomi/prototipo_login_api/)
-- [Português brasileiro](./README_pt-br.md)
+- [🇬🇧 / 🇺🇸 English / Inglês](https://github.com/AndreKuratomi/prototipo_login_api/)
+- [🇧🇷 / 🇵🇹 Português](./README_pt-br.md)
 
 <br>
 
